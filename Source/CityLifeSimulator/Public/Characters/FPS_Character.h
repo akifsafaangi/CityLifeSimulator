@@ -7,7 +7,7 @@
 #include "FPS_Character.generated.h"
 
 UCLASS()
-class CITYSIMULATOR_API AFPS_Character : public ACharacter
+class CITYLIFESIMULATOR_API AFPS_Character : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -25,12 +25,20 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
+	class USpringArmComponent* SpringArm;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
+	class UCameraComponent* Camera;
+
 private:
 	void MoveForward(float value);
 	void MoveRight(float value);
-	void Turn(float value);
+	void TurnCamera(float value);
 	void LookUp(float value);
 
-protected:
-	class UCameraComponent* Camera;
+	//Place Objects
+	void LineTrace();
 };
