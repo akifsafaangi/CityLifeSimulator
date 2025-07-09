@@ -94,6 +94,11 @@ void AFPS_Character::LineTrace()
 	}
 }
 
+UCameraComponent* AFPS_Character::GetCamera()
+{
+	return Camera;
+}
+
 void AFPS_Character::Interact() {
 	if (!HeldActor && !PlacingActor) {
 		if (HitObject && HitObject->GetClass()->ImplementsInterface(UInteractable::StaticClass())) {

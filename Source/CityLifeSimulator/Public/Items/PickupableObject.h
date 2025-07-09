@@ -26,4 +26,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+private:
+	bool bShouldMove = false;
+	FVector TargetLocation = FVector(400.0f, 0.0f, 0.0f);
 };

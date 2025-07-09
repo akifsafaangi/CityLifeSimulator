@@ -52,4 +52,6 @@ public:
 
 	UPROPERTY()
 	class APlacableObject* PlacingActor = nullptr;
+
+	UCameraComponent* GetCamera();
 };
