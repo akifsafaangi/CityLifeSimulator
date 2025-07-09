@@ -4,18 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Items/ItemDetails.h"
 #include "Items/PickupableObject.h"
-#include "PlacableObject.generated.h"
+#include "ContainerBox.generated.h"
 
 UCLASS()
-class CITYLIFESIMULATOR_API APlacableObject : public APickupableObject
+class CITYLIFESIMULATOR_API AContainerBox : public APickupableObject
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	APlacableObject();
+	AContainerBox();
 
 protected:
 	// Called when the game starts or when spawned
@@ -24,19 +23,15 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	
 	virtual void Interact(AActor* Interactor) override;
 private:
-	FItemDetails itemInfo;
-	
-	void Place();
-	void EnterPlacementMode();
-public:
-	UFUNCTION(BlueprintCallable, Category = "ItemInfo")
-	FItemDetails getItem() const;
+	void Throw();
+	void OpenBox();
 
-	UFUNCTION(BlueprintCallable, Category = "ItemInfo")
-	void setItem(FItemDetails item);
+	UPROPERTY(EditDefaultsOnly, Category = "Box")
+	TSubclassOf<class APlacableObject> ContainedObjectClass;
 
-	bool bIsInPlacementMode = false;
+	UPROPERTY()
+	APlacableObject* ContainedObject;
 };

@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "PlacableObject.h"
+#include "Items/ContainerBox.h"
 
 // Sets default values
-APlacableObject::APlacableObject()
+AContainerBox::AContainerBox()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -12,37 +12,29 @@ APlacableObject::APlacableObject()
 }
 
 // Called when the game starts or when spawned
-void APlacableObject::BeginPlay()
+void AContainerBox::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
 // Called every frame
-void APlacableObject::Tick(float DeltaTime)
+void AContainerBox::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
-void APlacableObject::Interact(AActor* Interactor)
+void AContainerBox::Interact(AActor* Interactor)
 {
 }
 
-void APlacableObject::Place()
+void AContainerBox::Throw()
 {
 }
 
-void APlacableObject::EnterPlacementMode()
+
+void AContainerBox::OpenBox()
 {
 }
 
-FItemDetails APlacableObject::getItem() const
-{
-	return itemInfo;
-}
-
-void APlacableObject::setItem(FItemDetails item)
-{
-	itemInfo = item;
-}
