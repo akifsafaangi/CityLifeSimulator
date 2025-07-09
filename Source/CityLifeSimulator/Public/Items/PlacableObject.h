@@ -12,8 +12,8 @@ UCLASS()
 class CITYLIFESIMULATOR_API APlacableObject : public APickupableObject
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	APlacableObject();
 
@@ -21,16 +21,16 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void Interact(AActor* Interactor) override;
+	void Interact_Implementation(AActor* Interactor) override;
 private:
 	FItemDetails itemInfo;
-	
-	void Place();
-	void EnterPlacementMode();
+
+	void Place(const FVector& Location);
+	void EnterPlacementMode(AActor* Interactor);
 public:
 	UFUNCTION(BlueprintCallable, Category = "ItemInfo")
 	FItemDetails getItem() const;

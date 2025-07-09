@@ -40,5 +40,16 @@ private:
 	void LookUp(float value);
 
 	//Place Objects
+	void Interact();
 	void LineTrace();
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interactable Object")
+	AActor* HitObject;
+
+	UPROPERTY()
+	class APickupableObject* HeldActor = nullptr;
+
+	UPROPERTY()
+	class APlacableObject* PlacingActor = nullptr;
 };

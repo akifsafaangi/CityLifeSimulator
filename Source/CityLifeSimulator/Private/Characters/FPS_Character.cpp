@@ -4,6 +4,8 @@
 #include "Characters/FPS_Character.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Items/PickupableObject.h"
+#include "Items/PlacableObject.h"
 
 // Sets default values
 AFPS_Character::AFPS_Character()
@@ -41,6 +43,8 @@ void AFPS_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AFPS_Character::Interact);
+
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AFPS_Character::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AFPS_Character::MoveRight);
@@ -87,5 +91,22 @@ void AFPS_Character::LineTrace()
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green,
 			FString::Printf(TEXT("Hit: %s"), *Hit.GetActor()->GetName()));
+	}
+}
+
+void AFPS_Character::Interact() {
+	if (!HeldActor && !PlacingActor) {
+		if (HitObject && HitObject->GetClass()->ImplementsInterface(UInteractable::StaticClass())) {
+			IInteractable::Execute_Interact(HitObject, this);
+
+			if (APickupableObject* Pick = Cast<APickupableObject>(HitObject)) {
+				if (APlacableObject* Place = Cast<APlacableObject>(HitObject)) {
+					PlacingActor = Place;
+				}
+				else {
+					HeldActor = Pick;
+				}
+			}
+		}
 	}
 }

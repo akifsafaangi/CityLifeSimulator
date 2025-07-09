@@ -24,7 +24,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
-	virtual void Interact(AActor* Interactor) override;
+	void Interact_Implementation(AActor* Interactor) override;
 private:
 	void Throw();
 	void OpenBox();

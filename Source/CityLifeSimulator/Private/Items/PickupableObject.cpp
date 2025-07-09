@@ -11,8 +11,9 @@ APickupableObject::APickupableObject()
 
 }
 
-void APickupableObject::Interact(AActor* Interactor)
+void APickupableObject::Interact_Implementation(AActor* Interactor)
 {
+	Pickup(Interactor);
 }
 
 // Called when the game starts or when spawned
@@ -24,6 +25,8 @@ void APickupableObject::BeginPlay()
 
 void APickupableObject::Pickup(AActor* Picker)
 {
+	bIsPickedUp = true;
+	AttachToActor(Picker, FAttachmentTransformRules::KeepWorldTransform, NAME_None);
 }
 
 // Called every frame

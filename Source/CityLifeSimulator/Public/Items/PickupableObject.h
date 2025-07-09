@@ -16,15 +16,14 @@ public:
 	// Sets default values for this actor's properties
 	APickupableObject();
 
-	virtual void Interact(AActor* Interactor) override;
+	void Interact_Implementation(AActor* Interactor) override;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	virtual void Pickup(AActor* Picker);
+	bool bIsPickedUp = false;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-private:
-	bool bIsPickedUp = false;
 };

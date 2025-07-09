@@ -25,8 +25,14 @@ void AContainerBox::Tick(float DeltaTime)
 
 }
 
-void AContainerBox::Interact(AActor* Interactor)
+void AContainerBox::Interact_Implementation(AActor* Interactor)
 {
+	if (bIsPickedUp) {
+
+	}
+	else {
+		bIsPickedUp = true;
+	}
 }
 
 void AContainerBox::Throw()
