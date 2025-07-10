@@ -19,11 +19,12 @@ public:
 	APickupableObject();
 
 	void Interact_Implementation(AActor* Interactor) override;
+	virtual void Pickup(AActor* Picker);
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	virtual void Pickup(AActor* Picker);
+	AActor* CurrentInteractor = nullptr;
 	bool bIsPickedUp;
 public:	
 	// Called every frame
@@ -34,6 +35,4 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UPhysicsHandleComponent* PhysicsHandle = nullptr;
-private:
-	AActor* CurrentInteractor = nullptr;
 };

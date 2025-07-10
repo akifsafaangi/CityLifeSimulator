@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "Items/PickupableObject.h"
 #include "Items/PlacableObject.h"
+#include "Items/ContainerBox.h"
 
 // Sets default values
 AFPS_Character::AFPS_Character()
@@ -46,6 +47,7 @@ void AFPS_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AFPS_Character::Interact);
+	PlayerInputComponent->BindAction("OpenObject", IE_Pressed, this, &AFPS_Character::OpenBox);
 
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AFPS_Character::MoveForward);
@@ -102,7 +104,6 @@ void AFPS_Character::Interact() {
 				if (APlacableObject* Place = Cast<APlacableObject>(HitObject)) {
 					PlacingActor = Place;
 					bIsInPlacementMode = true;
-					PlacingActor->EnterPlacementMode(this);
 				}
 				else {
 					HeldActor = Pick;
@@ -162,4 +163,15 @@ void AFPS_Character::RotatePlacementObject(float Value)
     {
         PlacingActor->RotateDuringPlacement(Value);
     }
+}
+
+void AFPS_Character::OpenBox()
+{
+	if (HitObject)
+	{
+		if (AContainerBox* Box = Cast<AContainerBox>(HitObject))
+		{
+			Box->OpenBox(this);
+		}
+	}
 }

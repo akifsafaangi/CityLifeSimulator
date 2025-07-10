@@ -50,6 +50,8 @@ void APlacableObject::Interact_Implementation(AActor* Interactor)
 void APlacableObject::Place()
 {
     bIsInPlacementMode = false;
+    bIsPickedUp = false;
+    SetCurrentInteractor(nullptr);
 }
 
 void APlacableObject::EnterPlacementMode(AActor* Interactor)

@@ -25,13 +25,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	
 	void Interact_Implementation(AActor* Interactor) override;
+	void OpenBox(AActor* Interactor);
 private:
 	void Throw();
-	void OpenBox();
 
 	UPROPERTY(EditDefaultsOnly, Category = "Box")
 	TSubclassOf<class APlacableObject> ContainedObjectClass;
-
-	UPROPERTY()
-	APlacableObject* ContainedObject;
 };

@@ -44,6 +44,7 @@ private:
 	void LineTrace();
 	void UpdatePlacement();
 	void RotatePlacementObject(float Value);
+	void OpenBox();
 
 public:
 	UPROPERTY(BlueprintReadWrite)

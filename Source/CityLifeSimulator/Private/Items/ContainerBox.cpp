@@ -2,13 +2,13 @@
 
 
 #include "Items/ContainerBox.h"
+#include "Items/PlacableObject.h"
 
 // Sets default values
 AContainerBox::AContainerBox()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 // Called when the game starts or when spawned
@@ -45,11 +45,32 @@ void AContainerBox::Throw()
 		PhysicsHandle->ReleaseComponent();
 	}
 	SetCurrentInteractor(nullptr);
-	bIsPickedUp = false;
-	
 }
 
 
-void AContainerBox::OpenBox()
+void AContainerBox::OpenBox(AActor* Interactor)
 {
+	if (!ContainedObjectClass) return;
+
+    FActorSpawnParameters SpawnParams;
+    SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+    FVector SpawnLocation = GetActorLocation();
+    FRotator SpawnRotation = GetActorRotation();
+
+    APlacableObject* SpawnedObj = GetWorld()->SpawnActor<APlacableObject>(ContainedObjectClass, SpawnLocation, SpawnRotation, SpawnParams);
+
+	AFPS_Character* FPSChar = Cast<AFPS_Character>(Interactor);
+	if (SpawnedObj && FPSChar)
+    {
+		UE_LOG(LogTemp, Warning, TEXT("Spawned Placable Object: %s"), *SpawnedObj->GetName());
+		// Clear the held actor reference in the character
+		FPSChar->HeldActor = nullptr; // Clear any held actor
+        SpawnedObj->EnterPlacementMode(FPSChar);
+		FPSChar->bIsHolding = true;
+        FPSChar->bIsInPlacementMode = true;
+        FPSChar->PlacingActor = SpawnedObj;
+	}
+
+    Destroy();
 }
