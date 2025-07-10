@@ -29,6 +29,7 @@ public:
 	void UpdatePlacement(const FVector& HitLocation, const FVector& HitNormal);
 private:
 	FItemDetails itemInfo;
+	float PlacementYawOffset = 0.0f; // For rotation during placement
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "ItemInfo")
@@ -40,4 +41,5 @@ public:
 	void Place();
 	bool bIsInPlacementMode;
 	void EnterPlacementMode(AActor* Interactor);
+	void RotateDuringPlacement(float Value);
 };

@@ -21,7 +21,6 @@ void APlacableObject::BeginPlay()
 // Called every frame
 void APlacableObject::Tick(float DeltaTime)
 {
-    Super::Tick(DeltaTime);
 
 }
 
@@ -67,4 +66,10 @@ void APlacableObject::UpdatePlacement(const FVector& HitLocation, const FVector&
     PlaceLocation.Z += Extent.Z;
 
     SetActorLocation(PlaceLocation);
+    SetActorRotation(FRotator(0, PlacementYawOffset, 0));
+}
+
+void APlacableObject::RotateDuringPlacement(float Value)
+{
+    PlacementYawOffset += Value * 2.0f;
 }

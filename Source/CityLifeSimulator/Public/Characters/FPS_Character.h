@@ -43,6 +43,7 @@ private:
 	void Interact();
 	void LineTrace();
 	void UpdatePlacement();
+	void RotatePlacementObject(float Value);
 
 public:
 	UPROPERTY(BlueprintReadWrite)

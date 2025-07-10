@@ -52,6 +52,7 @@ void AFPS_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAxis("MoveRight", this, &AFPS_Character::MoveRight);
 	PlayerInputComponent->BindAxis("Turn", this, &AFPS_Character::TurnCamera);
 	PlayerInputComponent->BindAxis("LookUp", this, &AFPS_Character::LookUp);
+	PlayerInputComponent->BindAxis("TurnObject", this, &AFPS_Character::RotatePlacementObject);
 }
 
 void AFPS_Character::MoveForward(float value) {
@@ -152,5 +153,13 @@ void AFPS_Character::UpdatePlacement()
         {
             PlacingActor->UpdatePlacement(Hit.Location, Hit.Normal);
         }
+    }
+}
+
+void AFPS_Character::RotatePlacementObject(float Value)
+{
+    if (PlacingActor && PlacingActor->bIsInPlacementMode && FMath::Abs(Value) > KINDA_SMALL_NUMBER)
+    {
+        PlacingActor->RotateDuringPlacement(Value);
     }
 }
