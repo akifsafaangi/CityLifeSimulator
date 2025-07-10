@@ -12,6 +12,8 @@ AFPS_Character::AFPS_Character()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	bIsHolding = false;
+	bIsInPlacementMode = false;
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	SpringArm->SetupAttachment(RootComponent);
@@ -73,10 +75,7 @@ void AFPS_Character::LineTrace()
 	if (!Camera) return;
 
 	FVector start = Camera->GetComponentLocation();
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Start: ") + start.ToString());
-	}
+
 	FVector end = (Camera->GetForwardVector() * 500.0f) + start;
 	FHitResult Hit;
 
@@ -86,12 +85,6 @@ void AFPS_Character::LineTrace()
 	bool bHit = GetWorld()->LineTraceSingleByChannel(Hit, start, end, ECollisionChannel::ECC_Visibility, params);
 
 	DrawDebugLine(GetWorld(), start, end, FColor::Red, false, 2.0f, 0, 0.5f);
-
-	if (bHit)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green,
-			FString::Printf(TEXT("Hit: %s"), *Hit.GetActor()->GetName()));
-	}
 }
 
 UCameraComponent* AFPS_Character::GetCamera()
@@ -103,7 +96,7 @@ void AFPS_Character::Interact() {
 	if (!HeldActor && !PlacingActor) {
 		if (HitObject && HitObject->GetClass()->ImplementsInterface(UInteractable::StaticClass())) {
 			IInteractable::Execute_Interact(HitObject, this);
-
+			bIsHolding = true;
 			if (APickupableObject* Pick = Cast<APickupableObject>(HitObject)) {
 				if (APlacableObject* Place = Cast<APlacableObject>(HitObject)) {
 					PlacingActor = Place;
@@ -112,6 +105,13 @@ void AFPS_Character::Interact() {
 					HeldActor = Pick;
 				}
 			}
+		}
+	}
+	else {
+		if (HeldActor) {
+			IInteractable::Execute_Interact(HeldActor, this);
+			bIsHolding = false;
+			HeldActor = nullptr;
 		}
 	}
 }

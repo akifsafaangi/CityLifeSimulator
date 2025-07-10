@@ -27,20 +27,29 @@ void AContainerBox::Tick(float DeltaTime)
 
 void AContainerBox::Interact_Implementation(AActor* Interactor)
 {
-	if (bIsPickedUp) {
 
+	if (bIsPickedUp) {
+		Throw();
+		bIsPickedUp = false;
 	}
 	else {
+		Pickup(Interactor);
 		bIsPickedUp = true;
 	}
 }
 
 void AContainerBox::Throw()
 {
+	if (PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
+	{
+		PhysicsHandle->ReleaseComponent();
+	}
+	SetCurrentInteractor(nullptr);
+	bIsPickedUp = false;
+	
 }
 
 
 void AContainerBox::OpenBox()
 {
 }
-

@@ -1,0 +1,122 @@
+[
+	{
+		"file": "C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\Source\\CityLifeSimulator\\CityLifeSimulator.Build.cs",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\.vscode\\compileCommands_CityLifeSimulator\\CityLifeSimulator.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\Source\\CityLifeSimulator\\CityLifeSimulator.cpp",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\.vscode\\compileCommands_CityLifeSimulator\\CityLifeSimulator.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\Source\\CityLifeSimulator\\CityLifeSimulator.h",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\.vscode\\compileCommands_CityLifeSimulator\\CityLifeSimulator.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\Source\\CityLifeSimulator\\Private\\Characters\\FPS_Character.cpp",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\.vscode\\compileCommands_CityLifeSimulator\\CityLifeSimulator.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\Source\\CityLifeSimulator\\Private\\Items\\ContainerBox.cpp",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\.vscode\\compileCommands_CityLifeSimulator\\CityLifeSimulator.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\Source\\CityLifeSimulator\\Private\\Items\\Interactable.cpp",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\.vscode\\compileCommands_CityLifeSimulator\\CityLifeSimulator.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\Source\\CityLifeSimulator\\Private\\Items\\ItemDetails.cpp",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\.vscode\\compileCommands_CityLifeSimulator\\CityLifeSimulator.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\Source\\CityLifeSimulator\\Private\\Items\\PickupableObject.cpp",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\.vscode\\compileCommands_CityLifeSimulator\\CityLifeSimulator.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\Source\\CityLifeSimulator\\Private\\Items\\PlacableObject.cpp",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\.vscode\\compileCommands_CityLifeSimulator\\CityLifeSimulator.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\Source\\CityLifeSimulator\\Public\\Characters\\FPS_Character.h",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\.vscode\\compileCommands_CityLifeSimulator\\CityLifeSimulator.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\Source\\CityLifeSimulator\\Public\\Items\\ContainerBox.h",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\.vscode\\compileCommands_CityLifeSimulator\\CityLifeSimulator.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\Source\\CityLifeSimulator\\Public\\Items\\Interactable.h",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\.vscode\\compileCommands_CityLifeSimulator\\CityLifeSimulator.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\Source\\CityLifeSimulator\\Public\\Items\\ItemDetails.h",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\.vscode\\compileCommands_CityLifeSimulator\\CityLifeSimulator.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\Source\\CityLifeSimulator\\Public\\Items\\PickupableObject.h",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\.vscode\\compileCommands_CityLifeSimulator\\CityLifeSimulator.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\Source\\CityLifeSimulator\\Public\\Items\\PlacableObject.h",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\.vscode\\compileCommands_CityLifeSimulator\\CityLifeSimulator.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	}
+]

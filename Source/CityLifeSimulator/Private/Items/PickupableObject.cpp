@@ -3,6 +3,7 @@
 
 #include "Items/PickupableObject.h"
 #include "Camera/CameraComponent.h"
+#include "Components/PrimitiveComponent.h"
 #include "Characters/FPS_Character.h"
 
 // Sets default values
@@ -10,7 +11,9 @@ APickupableObject::APickupableObject()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	bIsPickedUp = false;
 
+	PhysicsHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("Physics Component"));
 }
 
 void APickupableObject::Interact_Implementation(AActor* Interactor)
@@ -27,22 +30,19 @@ void APickupableObject::BeginPlay()
 
 void APickupableObject::Pickup(AActor* Picker)
 {
+	UPrimitiveComponent* RootPrim = FindComponentByClass<UPrimitiveComponent>();
+
+	if (!RootPrim) return;
+
+	CurrentInteractor = Picker;
 	bIsPickedUp = true;
-	AFPS_Character* player = Cast<AFPS_Character>(Picker);
-	if (player) {
-		FTransform WorldTransform = GetActorTransform();
-		FTransform CameraTransform = player->GetCamera()->GetComponentTransform();
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *WorldTransform.GetLocation().ToString());
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *CameraTransform.GetLocation().ToString());
 
-		FTransform RelativeTransform = WorldTransform.GetRelativeTransform(CameraTransform);
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *RelativeTransform.GetLocation().ToString());
-
-		AttachToComponent(player->GetCamera(), FAttachmentTransformRules::KeepRelativeTransform, NAME_None);
-
-		SetActorRelativeTransform(RelativeTransform);
-
-		bShouldMove = true;
+	AFPS_Character* Player = Cast<AFPS_Character>(Picker);
+	if (Player && Player->GetCamera())
+	{
+		FVector GrabLocation = Player->GetCamera()->GetComponentLocation() + Player->GetCamera()->GetForwardVector() * 400.f;
+		FRotator GrabRotation = FRotator::ZeroRotator;
+		PhysicsHandle->GrabComponentAtLocationWithRotation(RootPrim, NAME_None, RootPrim->GetComponentLocation(), RootPrim->GetComponentRotation());
 	}
 }
 
@@ -51,20 +51,14 @@ void APickupableObject::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (bShouldMove) {
-		FVector CurrentLocation = GetRootComponent()->GetRelativeLocation();
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *CurrentLocation.ToString());
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *TargetLocation.ToString());
-		FVector NewLocation = FMath::VInterpTo(CurrentLocation, TargetLocation, DeltaTime, 5.0f);
-		GetRootComponent()->SetRelativeLocation(NewLocation);
-
-		FRotator NewRotation = FMath::RInterpTo(GetRootComponent()->GetRelativeRotation(), FRotator(0.0f, 0.0f, 0.0f), DeltaTime, 5.0f);
-		GetRootComponent()->SetRelativeRotation(NewRotation);
-
-		if (FVector::Dist(CurrentLocation, TargetLocation) < 1.f)
+	if (CurrentInteractor && PhysicsHandle && PhysicsHandle->GrabbedComponent)
+	{
+		AFPS_Character* Player = Cast<AFPS_Character>(CurrentInteractor);
+		if (Player && Player->GetCamera())
 		{
-			GetRootComponent()->SetRelativeLocation(TargetLocation);
-			bShouldMove = false;
+			FVector TargetLoc = Player->GetCamera()->GetComponentLocation() + Player->GetCamera()->GetForwardVector() * 400.f;
+			FRotator TargetRot = Player->GetCamera()->GetComponentRotation();
+			PhysicsHandle->SetTargetLocationAndRotation(TargetLoc, TargetRot);
 		}
 	}
 }

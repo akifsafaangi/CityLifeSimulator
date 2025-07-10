@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Items/Interactable.h"
+#include <PhysicsEngine/PhysicsHandleComponent.h>
 #include "PickupableObject.generated.h"
 
 UCLASS()
@@ -22,11 +23,16 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void Pickup(AActor* Picker);
-	bool bIsPickedUp = false;
+	bool bIsPickedUp;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	AActor* GetCurrentInteractor() const { return CurrentInteractor; }
+	void SetCurrentInteractor(AActor* Interactor) { CurrentInteractor = Interactor; }
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class UPhysicsHandleComponent* PhysicsHandle = nullptr;
 private:
-	bool bShouldMove = false;
-	FVector TargetLocation = FVector(400.0f, 0.0f, 0.0f);
+	AActor* CurrentInteractor = nullptr;
 };

@@ -44,8 +44,14 @@ private:
 	void LineTrace();
 
 public:
+	UPROPERTY(BlueprintReadWrite)
+	bool bIsHolding;
+	UPROPERTY(BlueprintReadWrite)
+	bool bIsInPlacementMode;
+	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interactable Object")
-	AActor* HitObject;
+	AActor* HitObject = nullptr;
 
 	UPROPERTY()
 	class APickupableObject* HeldActor = nullptr;

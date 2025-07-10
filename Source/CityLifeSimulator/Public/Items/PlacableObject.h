@@ -38,5 +38,5 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ItemInfo")
 	void setItem(FItemDetails item);
 
-	bool bIsInPlacementMode = false;
+	bool bIsInPlacementMode;
 };
