@@ -26,11 +26,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void Interact_Implementation(AActor* Interactor) override;
+	void UpdatePlacement(const FVector& HitLocation, const FVector& HitNormal);
 private:
 	FItemDetails itemInfo;
 
-	void Place(const FVector& Location);
-	void EnterPlacementMode(AActor* Interactor);
 public:
 	UFUNCTION(BlueprintCallable, Category = "ItemInfo")
 	FItemDetails getItem() const;
@@ -38,5 +37,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ItemInfo")
 	void setItem(FItemDetails item);
 
+	void Place();
 	bool bIsInPlacementMode;
+	void EnterPlacementMode(AActor* Interactor);
 };

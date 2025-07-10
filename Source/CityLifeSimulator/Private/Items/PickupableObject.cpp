@@ -4,7 +4,6 @@
 #include "Items/PickupableObject.h"
 #include "Camera/CameraComponent.h"
 #include "Components/PrimitiveComponent.h"
-#include "Characters/FPS_Character.h"
 
 // Sets default values
 APickupableObject::APickupableObject()

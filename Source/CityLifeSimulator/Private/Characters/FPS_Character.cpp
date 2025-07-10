@@ -36,7 +36,7 @@ void AFPS_Character::BeginPlay()
 void AFPS_Character::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//LineTrace();
+	UpdatePlacement();
 }
 
 // Called to bind functionality to input
@@ -100,6 +100,8 @@ void AFPS_Character::Interact() {
 			if (APickupableObject* Pick = Cast<APickupableObject>(HitObject)) {
 				if (APlacableObject* Place = Cast<APlacableObject>(HitObject)) {
 					PlacingActor = Place;
+					bIsInPlacementMode = true;
+					PlacingActor->EnterPlacementMode(this);
 				}
 				else {
 					HeldActor = Pick;
@@ -112,6 +114,43 @@ void AFPS_Character::Interact() {
 			IInteractable::Execute_Interact(HeldActor, this);
 			bIsHolding = false;
 			HeldActor = nullptr;
+			HitObject = nullptr;
+		} else if (PlacingActor) {
+			PlaceObject();
+		}
+		else {
+			UE_LOG(LogTemp, Warning, TEXT("No Held or Placing Actor Found"));
 		}
 	}
+}
+
+void AFPS_Character::PlaceObject()
+{
+    if (PlacingActor && PlacingActor->bIsInPlacementMode)
+    {
+        PlacingActor->Place();
+        PlacingActor = nullptr;
+		bIsInPlacementMode = false;
+		bIsHolding = false;
+		HitObject = nullptr;
+    }
+}
+
+
+void AFPS_Character::UpdatePlacement()
+{
+	if (PlacingActor && PlacingActor->bIsInPlacementMode)
+    {
+        FVector Start = Camera->GetComponentLocation();
+        FVector End = Start + (Camera->GetForwardVector() * 1000.f);
+
+        FHitResult Hit;
+        FCollisionQueryParams Params;
+        Params.AddIgnoredActor(this);
+		Params.AddIgnoredActor(PlacingActor);
+        if (GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, Params))
+        {
+            PlacingActor->UpdatePlacement(Hit.Location, Hit.Normal);
+        }
+    }
 }

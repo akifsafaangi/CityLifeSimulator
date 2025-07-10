@@ -25,25 +25,6 @@ void APlacableObject::Tick(float DeltaTime)
 
 }
 
-void APlacableObject::Interact_Implementation(AActor* Interactor)
-{
-    if (!bIsInPlacementMode)
-    {
-        EnterPlacementMode(Interactor);
-    }
-    else
-    {
-        Place(GetActorLocation());
-    }
-}
-
-void APlacableObject::Place(const FVector& Location)
-{
-}
-
-void APlacableObject::EnterPlacementMode(AActor* Interactor)
-{
-}
 
 FItemDetails APlacableObject::getItem() const
 {
@@ -53,4 +34,37 @@ FItemDetails APlacableObject::getItem() const
 void APlacableObject::setItem(FItemDetails item)
 {
     itemInfo = item;
+}
+
+void APlacableObject::Interact_Implementation(AActor* Interactor)
+{
+    if (!bIsInPlacementMode)
+    {
+        EnterPlacementMode(Interactor);
+    }
+    else
+    {
+        Place();
+    }
+}
+
+void APlacableObject::Place()
+{
+    bIsInPlacementMode = false;
+}
+
+void APlacableObject::EnterPlacementMode(AActor* Interactor)
+{
+    bIsInPlacementMode = true;
+}
+
+void APlacableObject::UpdatePlacement(const FVector& HitLocation, const FVector& HitNormal)
+{
+    FVector Origin, Extent;
+    GetActorBounds(true, Origin, Extent);
+
+    FVector PlaceLocation = HitLocation;
+    PlaceLocation.Z += Extent.Z;
+
+    SetActorLocation(PlaceLocation);
 }

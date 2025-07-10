@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Items/Interactable.h"
 #include <PhysicsEngine/PhysicsHandleComponent.h>
+#include "Characters/FPS_Character.h"
 #include "PickupableObject.generated.h"
 
 UCLASS()

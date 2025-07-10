@@ -42,6 +42,7 @@ private:
 	//Place Objects
 	void Interact();
 	void LineTrace();
+	void UpdatePlacement();
 
 public:
 	UPROPERTY(BlueprintReadWrite)
@@ -49,6 +50,7 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	bool bIsInPlacementMode;
 	
+	void SetIsInPlacementMode(bool bIsInPlacement) { bIsInPlacementMode = bIsInPlacement; }
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interactable Object")
 	AActor* HitObject = nullptr;
@@ -58,6 +60,9 @@ public:
 
 	UPROPERTY()
 	class APlacableObject* PlacingActor = nullptr;
+
+	UFUNCTION(BlueprintCallable, Category = "Placement")
+	void PlaceObject();
 
 	UCameraComponent* GetCamera();
 };
