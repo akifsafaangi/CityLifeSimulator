@@ -11,6 +11,7 @@ APickupableObject::APickupableObject()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	bIsPickedUp = false;
+	HighlightMaterial = nullptr;
 
 	PhysicsHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("Physics Component"));
 }
@@ -62,3 +63,12 @@ void APickupableObject::Tick(float DeltaTime)
 	}
 }
 
+void APickupableObject::InteractHighlight_Implementation()
+{
+	
+}
+
+void APickupableObject::InteractEnd_Implementation()
+{
+	// Logic for ending interaction can be implemented here if needed
+}

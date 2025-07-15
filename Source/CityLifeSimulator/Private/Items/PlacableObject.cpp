@@ -57,6 +57,7 @@ void APlacableObject::Place()
 void APlacableObject::EnterPlacementMode(AActor* Interactor)
 {
     bIsInPlacementMode = true;
+    Interactor->SetActorTickEnabled(true);
 }
 
 void APlacableObject::UpdatePlacement(const FVector& HitLocation, const FVector& HitNormal)

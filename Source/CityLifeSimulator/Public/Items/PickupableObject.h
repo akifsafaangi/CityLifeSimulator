@@ -19,6 +19,8 @@ public:
 	APickupableObject();
 
 	void Interact_Implementation(AActor* Interactor) override;
+	void InteractHighlight_Implementation() override {}
+	void InteractEnd_Implementation() override {}
 	virtual void Pickup(AActor* Picker);
 protected:
 	// Called when the game starts or when spawned
