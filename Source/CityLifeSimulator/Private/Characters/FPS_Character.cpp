@@ -130,7 +130,6 @@ void AFPS_Character::PlaceObject()
 {
     if (PlacingActor && PlacingActor->bIsInPlacementMode)
     {
-		SetActorTickEnabled(false);
         PlacingActor->Place();
         PlacingActor = nullptr;
 		bIsInPlacementMode = false;

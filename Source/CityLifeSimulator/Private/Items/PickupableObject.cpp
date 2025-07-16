@@ -4,6 +4,7 @@
 #include "Items/PickupableObject.h"
 #include "Camera/CameraComponent.h"
 #include "Components/PrimitiveComponent.h"
+#include "Components/StaticMeshComponent.h"
 
 // Sets default values
 APickupableObject::APickupableObject()
@@ -11,7 +12,12 @@ APickupableObject::APickupableObject()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	bIsPickedUp = false;
-	HighlightMaterial = nullptr;
+
+	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
+	StaticMesh->SetSimulatePhysics(true);
+	StaticMesh->SetRenderCustomDepth(true);
+	StaticMesh->SetCustomDepthStencilValue(1);
+	RootComponent = StaticMesh;
 
 	PhysicsHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("Physics Component"));
 }
