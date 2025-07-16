@@ -55,7 +55,7 @@ public:
 	void SetIsInPlacementMode(bool bIsInPlacement) { bIsInPlacementMode = bIsInPlacement; }
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interactable Object")
-	AActor* HitObject = nullptr;
+	class APickupableObject* HitObject = nullptr;
 
 	UPROPERTY()
 	class APickupableObject* HeldActor = nullptr;

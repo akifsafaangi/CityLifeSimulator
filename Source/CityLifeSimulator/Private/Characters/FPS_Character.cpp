@@ -12,7 +12,7 @@
 AFPS_Character::AFPS_Character()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 	bIsHolding = false;
 	bIsInPlacementMode = false;
 
@@ -97,8 +97,9 @@ UCameraComponent* AFPS_Character::GetCamera()
 
 void AFPS_Character::Interact() {
 	if (!HeldActor && !PlacingActor) {
-		if (HitObject && HitObject->GetClass()->ImplementsInterface(UInteractable::StaticClass())) {
+		if (HitObject) {
 			IInteractable::Execute_Interact(HitObject, this);
+			HitObject->StaticMesh->SetRenderCustomDepth(false);
 			bIsHolding = true;
 			if (APickupableObject* Pick = Cast<APickupableObject>(HitObject)) {
 				if (APlacableObject* Place = Cast<APlacableObject>(HitObject)) {

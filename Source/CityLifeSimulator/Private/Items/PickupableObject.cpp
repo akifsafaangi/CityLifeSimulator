@@ -17,6 +17,7 @@ APickupableObject::APickupableObject()
 	StaticMesh->SetSimulatePhysics(true);
 	StaticMesh->SetRenderCustomDepth(true);
 	StaticMesh->SetCustomDepthStencilValue(1);
+	StaticMesh->SetRenderCustomDepth(false);
 	RootComponent = StaticMesh;
 
 	PhysicsHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("Physics Component"));
