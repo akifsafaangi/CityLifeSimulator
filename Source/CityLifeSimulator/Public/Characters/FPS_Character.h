@@ -59,6 +59,9 @@ public:
 	
 	void SetIsInPlacementMode(bool bIsInPlacement) { bIsInPlacementMode = bIsInPlacement; }
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	class UMaterialInstanceDynamic* MyDynMat;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interactable Object")
 	class APickupableObject* HitObject = nullptr;
 

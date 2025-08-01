@@ -53,6 +53,7 @@ void AFPS_Character::Tick(float DeltaTime)
 			}
 		} else {
 			HoldingTime += DeltaTime;
+			MyDynMat->SetScalarParameterValue("Percent", HoldingTime);
 		}
 	}
 	UpdatePlacement();
