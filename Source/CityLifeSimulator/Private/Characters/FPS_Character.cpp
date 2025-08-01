@@ -15,6 +15,9 @@ AFPS_Character::AFPS_Character()
 	PrimaryActorTick.bCanEverTick = true;
 	bIsHolding = false;
 	bIsInPlacementMode = false;
+	HoldingTime = 0.0f;
+	bLongPressTriggered	= false;
+	bCountHolding = false;
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	SpringArm->SetupAttachment(RootComponent);
@@ -30,13 +33,28 @@ AFPS_Character::AFPS_Character()
 void AFPS_Character::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
 void AFPS_Character::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if (bCountHolding && !bLongPressTriggered)
+	{	
+		if (HoldingTime >= 2.0f && HitObject) {
+			if (APlacableObject* Place = Cast<APlacableObject>(HitObject)) {
+				bLongPressTriggered = true;
+				IInteractable::Execute_Interact(HitObject, this);
+				HitObject->StaticMesh->SetRenderCustomDepth(false);
+				bIsHolding = true;
+				PlacingActor = Place;
+				bIsInPlacementMode = true;
+				HoldingTime = 0.0f;
+			}
+		} else {
+			HoldingTime += DeltaTime;
+		}
+	}
 	UpdatePlacement();
 }
 
@@ -47,6 +65,7 @@ void AFPS_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AFPS_Character::Interact);
+	PlayerInputComponent->BindAction("Interact", IE_Released, this, &AFPS_Character::InteractRelease);
 	PlayerInputComponent->BindAction("OpenObject", IE_Pressed, this, &AFPS_Character::OpenBox);
 
 
@@ -98,17 +117,16 @@ UCameraComponent* AFPS_Character::GetCamera()
 void AFPS_Character::Interact() {
 	if (!HeldActor && !PlacingActor) {
 		if (HitObject) {
-			IInteractable::Execute_Interact(HitObject, this);
-			HitObject->StaticMesh->SetRenderCustomDepth(false);
-			bIsHolding = true;
-			if (APickupableObject* Pick = Cast<APickupableObject>(HitObject)) {
-				if (APlacableObject* Place = Cast<APlacableObject>(HitObject)) {
-					PlacingActor = Place;
-					bIsInPlacementMode = true;
-				}
-				else {
-					HeldActor = Pick;
-				}
+			if (Cast<APlacableObject>(HitObject)) {
+				HoldingTime = 0.0f;
+				bCountHolding = true;
+				bLongPressTriggered = false;
+			}
+			else {
+				IInteractable::Execute_Interact(HitObject, this);
+				HitObject->StaticMesh->SetRenderCustomDepth(false);
+				bIsHolding = true;
+				HeldActor = Cast<APickupableObject>(HitObject);
 			}
 		}
 	}
@@ -125,6 +143,13 @@ void AFPS_Character::Interact() {
 			UE_LOG(LogTemp, Warning, TEXT("No Held or Placing Actor Found"));
 		}
 	}
+}
+
+void AFPS_Character::InteractRelease()
+{
+	bCountHolding = false;
+	HoldingTime = 0.0f;
+	bLongPressTriggered = false;
 }
 
 void AFPS_Character::PlaceObject()

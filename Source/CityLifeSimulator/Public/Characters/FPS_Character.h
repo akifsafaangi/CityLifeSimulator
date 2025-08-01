@@ -41,10 +41,15 @@ private:
 
 	//Place Objects
 	void Interact();
+	void InteractRelease();
 	void LineTrace();
 	void UpdatePlacement();
 	void RotatePlacementObject(float Value);
 	void OpenBox();
+
+	float HoldingTime;
+	bool bCountHolding;
+	bool bLongPressTriggered;
 
 public:
 	UPROPERTY(BlueprintReadWrite)
