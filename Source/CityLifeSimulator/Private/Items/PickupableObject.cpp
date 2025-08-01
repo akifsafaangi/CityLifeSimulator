@@ -43,10 +43,12 @@ void APickupableObject::Pickup(AActor* Picker)
 
 	CurrentInteractor = Picker;
 	bIsPickedUp = true;
+		UE_LOG(LogTemp, Warning, TEXT("Attempting to pick up object"));
 
 	AFPS_Character* Player = Cast<AFPS_Character>(Picker);
 	if (Player && Player->GetCamera())
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Attempting to pick up object"));
 		FVector GrabLocation = Player->GetCamera()->GetComponentLocation() + Player->GetCamera()->GetForwardVector() * 400.f;
 		FRotator GrabRotation = FRotator::ZeroRotator;
 		PhysicsHandle->GrabComponentAtLocationWithRotation(RootPrim, NAME_None, RootPrim->GetComponentLocation(), RootPrim->GetComponentRotation());
