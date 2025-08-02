@@ -18,6 +18,7 @@ AFPS_Character::AFPS_Character()
 	HoldingTime = 0.0f;
 	bLongPressTriggered	= false;
 	bCountHolding = false;
+	MaxHoldingTime = 2.0f;
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	SpringArm->SetupAttachment(RootComponent);
@@ -41,7 +42,7 @@ void AFPS_Character::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if (bCountHolding && !bLongPressTriggered)
 	{	
-		if (HoldingTime >= 2.0f && HitObject) {
+		if (HoldingTime >= MaxHoldingTime && HitObject) {
 			if (APlacableObject* Place = Cast<APlacableObject>(HitObject)) {
 				bLongPressTriggered = true;
 				IInteractable::Execute_Interact(HitObject, this);
@@ -50,10 +51,11 @@ void AFPS_Character::Tick(float DeltaTime)
 				PlacingActor = Place;
 				bIsInPlacementMode = true;
 				HoldingTime = 0.0f;
+				ProgressBarPercent(0.0f);
 			}
 		} else {
 			HoldingTime += DeltaTime;
-			MyDynMat->SetScalarParameterValue("Percent", HoldingTime);
+			ProgressBarPercent(HoldingTime / MaxHoldingTime);
 		}
 	}
 	UpdatePlacement();
@@ -151,6 +153,7 @@ void AFPS_Character::InteractRelease()
 	bCountHolding = false;
 	HoldingTime = 0.0f;
 	bLongPressTriggered = false;
+	ProgressBarPercent(0.0f);
 }
 
 void AFPS_Character::PlaceObject()

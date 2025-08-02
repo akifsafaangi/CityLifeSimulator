@@ -50,6 +50,7 @@ private:
 	float HoldingTime;
 	bool bCountHolding;
 	bool bLongPressTriggered;
+	float MaxHoldingTime;
 
 public:
 	UPROPERTY(BlueprintReadWrite)
@@ -58,9 +59,6 @@ public:
 	bool bIsInPlacementMode;
 	
 	void SetIsInPlacementMode(bool bIsInPlacement) { bIsInPlacementMode = bIsInPlacement; }
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	class UMaterialInstanceDynamic* MyDynMat;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interactable Object")
 	class APickupableObject* HitObject = nullptr;
@@ -73,6 +71,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Placement")
 	void PlaceObject();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "ProgressBar")
+	void ProgressBarPercent(float percent);
 
 	UCameraComponent* GetCamera();
 };
