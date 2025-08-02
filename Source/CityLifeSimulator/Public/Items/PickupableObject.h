@@ -28,6 +28,8 @@ protected:
 
 	AActor* CurrentInteractor = nullptr;
 	bool bIsPickedUp;
+
+	float PickupCameraOffset; // Offset for the camera when picking up
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

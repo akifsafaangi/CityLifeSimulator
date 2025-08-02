@@ -21,6 +21,8 @@ APickupableObject::APickupableObject()
 	RootComponent = StaticMesh;
 
 	PhysicsHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("Physics Component"));
+
+	PickupCameraOffset = 400.f; // Default offset for the camera when picking up
 }
 
 void APickupableObject::Interact_Implementation(AActor* Interactor)
@@ -49,8 +51,6 @@ void APickupableObject::Pickup(AActor* Picker)
 	if (Player && Player->GetCamera())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Attempting to pick up object"));
-		FVector GrabLocation = Player->GetCamera()->GetComponentLocation() + Player->GetCamera()->GetForwardVector() * 400.f;
-		FRotator GrabRotation = FRotator::ZeroRotator;
 		PhysicsHandle->GrabComponentAtLocationWithRotation(RootPrim, NAME_None, RootPrim->GetComponentLocation(), RootPrim->GetComponentRotation());
 	}
 }
@@ -65,7 +65,7 @@ void APickupableObject::Tick(float DeltaTime)
 		AFPS_Character* Player = Cast<AFPS_Character>(CurrentInteractor);
 		if (Player && Player->GetCamera())
 		{
-			FVector TargetLoc = Player->GetCamera()->GetComponentLocation() + Player->GetCamera()->GetForwardVector() * 400.f;
+			FVector TargetLoc = Player->GetCamera()->GetComponentLocation() + Player->GetCamera()->GetForwardVector() * PickupCameraOffset;
 			FRotator TargetRot = Player->GetCamera()->GetComponentRotation();
 			PhysicsHandle->SetTargetLocationAndRotation(TargetLoc, TargetRot);
 		}
