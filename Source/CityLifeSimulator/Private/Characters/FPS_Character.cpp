@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "Items/PickupableObject.h"
 #include "Items/PlacableObject.h"
+#include "CardboardBox.h"
 #include "Items/ContainerBox.h"
 
 // Sets default values
@@ -202,6 +203,9 @@ void AFPS_Character::OpenBox()
 		if (AContainerBox* Box = Cast<AContainerBox>(HitObject))
 		{
 			Box->OpenBox(this);
+		} else if (ACardboardBox* Cardboard = Cast<ACardboardBox>(HitObject))
+		{
+			Cardboard->OpenBox(this);
 		}
 	}
 }

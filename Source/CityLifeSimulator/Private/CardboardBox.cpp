@@ -25,7 +25,7 @@ void ACardboardBox::Tick(float DeltaTime)
         if (Player && Player->GetCamera())
         {
             FVector TargetLoc = Player->GetCamera()->GetComponentLocation() + Player->GetCamera()->GetForwardVector() * PickupCameraOffset;
-            TargetLoc.Z -= 100.f; // Adjust height if necessary
+            TargetLoc.Z -= 80.f; // Adjust height if necessary
             FRotator TargetRot = Player->GetCamera()->GetComponentRotation();
             PhysicsHandle->SetTargetLocationAndRotation(TargetLoc, TargetRot);
         }
@@ -66,4 +66,9 @@ void ACardboardBox::Throw()
 		PhysicsHandle->ReleaseComponent();
 	}
 	SetCurrentInteractor(nullptr);
+}
+
+void ACardboardBox::OpenBox(AActor* Interactor)
+{
+	OpenCloseBox();
 }

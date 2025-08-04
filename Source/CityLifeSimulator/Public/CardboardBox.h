@@ -23,6 +23,10 @@ public:
 
 	void Interact_Implementation(AActor* Interactor) override;
 	virtual void Pickup (AActor* Picker) override;
+	void OpenBox(AActor* Interactor);
+
+	UFUNCTION(BlueprintImplementableEvent, Category="CardboardBox")
+    void OpenCloseBox();
 public:
 	ACardboardBox();
 
