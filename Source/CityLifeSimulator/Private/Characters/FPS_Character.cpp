@@ -7,6 +7,7 @@
 #include "Items/PickupableObject.h"
 #include "Items/PlacableObject.h"
 #include "CardboardBox.h"
+#include "Shelf/StorageShelf.h"
 #include "Items/ContainerBox.h"
 
 // Sets default values
@@ -71,6 +72,7 @@ void AFPS_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AFPS_Character::Interact);
 	PlayerInputComponent->BindAction("Interact", IE_Released, this, &AFPS_Character::InteractRelease);
 	PlayerInputComponent->BindAction("OpenObject", IE_Pressed, this, &AFPS_Character::OpenBox);
+	PlayerInputComponent->BindAction("ShelfPlacement", IE_Pressed, this, &AFPS_Character::ShelfInteract);
 
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AFPS_Character::MoveForward);
@@ -119,32 +121,32 @@ UCameraComponent* AFPS_Character::GetCamera()
 }
 
 void AFPS_Character::Interact() {
-	if (!HeldActor && !PlacingActor) {
-		if (HitObject) {
+	if (HitObject && HitObject->GetClass()->ImplementsInterface(UInteractable::StaticClass())) {
+		if (!HeldActor && !PlacingActor) {
 			if (Cast<APlacableObject>(HitObject)) {
 				HoldingTime = 0.0f;
 				bCountHolding = true;
 				bLongPressTriggered = false;
 			}
-			else {
+			else if (APickupableObject* Pickupable = Cast<APickupableObject>(HitObject)) {
 				IInteractable::Execute_Interact(HitObject, this);
-				HitObject->StaticMesh->SetRenderCustomDepth(false);
+				Pickupable->StaticMesh->SetRenderCustomDepth(false);
 				bIsHolding = true;
-				HeldActor = Cast<APickupableObject>(HitObject);
+				HeldActor = Pickupable;
 			}
 		}
-	}
-	else {
-		if (HeldActor) {
-			IInteractable::Execute_Interact(HeldActor, this);
-			bIsHolding = false;
-			HeldActor = nullptr;
-			HitObject = nullptr;
-		} else if (PlacingActor) {
-			PlaceObject();
-		}
 		else {
-			UE_LOG(LogTemp, Warning, TEXT("No Held or Placing Actor Found"));
+			if (HeldActor) {
+				IInteractable::Execute_Interact(HeldActor, this);
+				bIsHolding = false;
+				HeldActor = nullptr;
+				HitObject = nullptr;
+			} else if (PlacingActor) {
+				PlaceObject();
+			}
+			else {
+				UE_LOG(LogTemp, Warning, TEXT("No Held or Placing Actor Found"));
+			}
 		}
 	}
 }
@@ -206,6 +208,21 @@ void AFPS_Character::OpenBox()
 		} else if (ACardboardBox* Cardboard = Cast<ACardboardBox>(HitObject))
 		{
 			Cardboard->OpenBox(this);
+		}
+	}
+}
+
+void AFPS_Character::ShelfInteract()
+{
+	if (HitObject)
+	{
+		if (AStorageShelf* Shelf = Cast<AStorageShelf>(HitObject))
+		{
+			Shelf->PlaceObjects();
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Hit object is not a StorageShelf"));
 		}
 	}
 }

@@ -47,6 +47,9 @@ private:
 	void RotatePlacementObject(float Value);
 	void OpenBox();
 
+	//
+	void ShelfInteract();
+
 	float HoldingTime;
 	bool bCountHolding;
 	bool bLongPressTriggered;
