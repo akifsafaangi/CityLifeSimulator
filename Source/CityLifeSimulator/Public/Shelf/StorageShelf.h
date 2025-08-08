@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Items/PlacableObject.h"
+#include "Components/BoxComponent.h"
+#include "CardboardBox.h"
 #include "StorageShelf.generated.h"
 
 UCLASS()
@@ -24,8 +26,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void PlaceObjects();
+	void PlaceObjects(UBoxComponent* sectionBox, ACardboardBox* Cardboard);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Collision")
-	TArray<class UBoxComponent*> SectionCollisions;
+	TArray<UBoxComponent*> SectionCollisions;
+private:
+	UBoxComponent* FindSection(UBoxComponent* BoxComponent) const;
 };

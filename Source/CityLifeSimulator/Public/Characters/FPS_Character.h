@@ -65,6 +65,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interactable Object")
 	class APickupableObject* HitObject = nullptr;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interactable Object")
+	class UPrimitiveComponent* HitComponent = nullptr;
 
 	UPROPERTY()
 	class APickupableObject* HeldActor = nullptr;

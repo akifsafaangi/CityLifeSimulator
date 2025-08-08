@@ -24,7 +24,24 @@ void AStorageShelf::Tick(float DeltaTime)
 
 }
 
-void AStorageShelf::PlaceObjects()
+void AStorageShelf::PlaceObjects(UBoxComponent* sectionBox, ACardboardBox* Cardboard)
 {
-			UE_LOG(LogTemp, Warning, TEXT("Placing objects in sectio"));
+	UBoxComponent* Section = FindSection(sectionBox);
+	if (Section)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Placing objects in section: %s"), *Section->GetName());
+		UE_LOG(LogTemp, Warning, TEXT("Placing cardboard box: %s"), *Cardboard->GetName());
+	}
+}
+
+UBoxComponent* AStorageShelf::FindSection(UBoxComponent* BoxComponent) const
+{
+	for (UBoxComponent* Section : SectionCollisions)
+	{
+		if (Section == BoxComponent)
+		{
+			return Section;
+		}
+	}
+	return nullptr;
 }

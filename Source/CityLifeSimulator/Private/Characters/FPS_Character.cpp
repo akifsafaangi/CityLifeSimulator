@@ -121,7 +121,6 @@ UCameraComponent* AFPS_Character::GetCamera()
 }
 
 void AFPS_Character::Interact() {
-	if (HitObject && HitObject->GetClass()->ImplementsInterface(UInteractable::StaticClass())) {
 		if (!HeldActor && !PlacingActor) {
 			if (Cast<APlacableObject>(HitObject)) {
 				HoldingTime = 0.0f;
@@ -148,7 +147,6 @@ void AFPS_Character::Interact() {
 				UE_LOG(LogTemp, Warning, TEXT("No Held or Placing Actor Found"));
 			}
 		}
-	}
 }
 
 void AFPS_Character::InteractRelease()
@@ -209,16 +207,28 @@ void AFPS_Character::OpenBox()
 		{
 			Cardboard->OpenBox(this);
 		}
+	} else if (bIsHolding) {
+		if (ACardboardBox* Cardboard = Cast<ACardboardBox>(HeldActor))
+		{
+			Cardboard->OpenBox(this);
+		}
 	}
 }
 
 void AFPS_Character::ShelfInteract()
 {
-	if (HitObject)
+	if (HitObject && HitComponent)
 	{
 		if (AStorageShelf* Shelf = Cast<AStorageShelf>(HitObject))
 		{
-			Shelf->PlaceObjects();
+			if (ACardboardBox* Cardboard = Cast<ACardboardBox>(HeldActor))
+			{
+				Shelf->PlaceObjects(Cast<UBoxComponent>(HitComponent), Cardboard);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Held actor is not a CardboardBox"));
+			}
 		}
 		else
 		{
