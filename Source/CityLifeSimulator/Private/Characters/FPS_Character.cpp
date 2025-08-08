@@ -236,3 +236,11 @@ void AFPS_Character::ShelfInteract()
 		}
 	}
 }
+
+void AFPS_Character::ClearInteractActor()
+{
+	bIsHolding = false;
+	HeldActor = nullptr;
+	HitObject = nullptr;
+	PlacingActor = nullptr;
+}

@@ -29,7 +29,13 @@ public:
     void OpenCloseBox();
 public:
 	ACardboardBox();
+	void MoveObject(FVector NewTargetLocation, float Duration);
 
 private:
 	void Throw();
+	bool bIsLerping = false;
+	float LerpElapsedTime = 0.0f;
+	float LerpDuration = 1.0f;
+	FVector StartLocation;
+	FVector TargetLocation;
 };

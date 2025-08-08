@@ -82,4 +82,6 @@ public:
 	void ProgressBarPercent(float percent);
 
 	UCameraComponent* GetCamera();
+
+	void ClearInteractActor();
 };

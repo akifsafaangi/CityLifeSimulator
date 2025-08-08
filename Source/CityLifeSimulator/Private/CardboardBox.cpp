@@ -30,6 +30,23 @@ void ACardboardBox::Tick(float DeltaTime)
             PhysicsHandle->SetTargetLocationAndRotation(TargetLoc, TargetRot);
         }
     }
+
+	
+	if (bIsLerping)
+    {
+        LerpElapsedTime += DeltaTime;
+        float Alpha = FMath::Clamp(LerpElapsedTime / LerpDuration, 0.0f, 1.0f);
+
+        FVector NewLocation = FMath::Lerp(StartLocation, TargetLocation, Alpha);
+        SetActorLocation(NewLocation);
+
+        if (Alpha >= 1.0f)
+        {
+            bIsLerping = false;
+        }
+
+		//StartLocation = GetActorLocation(); // Goes faster?
+    }
 }
 
 void ACardboardBox::Pickup(AActor* Picker)
@@ -71,4 +88,18 @@ void ACardboardBox::Throw()
 void ACardboardBox::OpenBox(AActor* Interactor)
 {
 	OpenCloseBox();
+}
+
+void ACardboardBox::MoveObject(FVector NewTargetLocation, float Duration)
+{
+	if (PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
+	{
+		PhysicsHandle->ReleaseComponent();
+	}
+	SetCurrentInteractor(nullptr);
+	StartLocation = GetActorLocation();
+	LerpElapsedTime = 0.0f;
+	LerpDuration = Duration;
+	TargetLocation = NewTargetLocation;
+	bIsLerping = true;
 }
