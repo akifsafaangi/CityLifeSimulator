@@ -30,6 +30,11 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Collision")
 	TArray<UBoxComponent*> SectionCollisions;
+	UFUNCTION(BlueprintCallable, Category = "SlotCount")
+	int GetSlotCount() const { return slotCount; }
+	UFUNCTION(BlueprintCallable, Category = "SlotCount")
+	void SetSlotCount(int NewCount) { slotCount = NewCount; }
 private:
 	UBoxComponent* FindSection(UBoxComponent* BoxComponent) const;
+	int slotCount;
 };

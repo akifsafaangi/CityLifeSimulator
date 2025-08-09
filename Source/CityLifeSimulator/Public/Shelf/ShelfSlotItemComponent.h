@@ -26,4 +26,17 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Shelf Slot Item")
 	bool bIsOccupied;
+
+	void MoveObject(FVector NewTargetLocation, float Duration);
+
+	// UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Shelf Slot Item")
+	// UStaticMeshComponent* ItemMesh;
+
+private:
+	UStaticMeshComponent* ItemMesh;
+	bool bIsLerping = false;
+	float LerpElapsedTime = 0.0f;
+	float LerpDuration = 1.0f;
+	FVector StartLocation;
+	FVector TargetLocation;
 };

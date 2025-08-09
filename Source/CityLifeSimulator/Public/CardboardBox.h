@@ -31,11 +31,15 @@ public:
 	ACardboardBox();
 	void MoveObject(FVector NewTargetLocation, float Duration);
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CardboardBoxItems")
+	TArray<class UShelfSlotItemComponent*> Items;
+
+	UFUNCTION(BlueprintCallable, Category = "CardboardBoxItems")
+	int GetItemCount() const { return itemCount; }
+	UFUNCTION(BlueprintCallable, Category = "CardboardBoxItems")
+	void SetItemCount(int NewCount) { itemCount = NewCount; }
 private:
 	void Throw();
-	bool bIsLerping = false;
-	float LerpElapsedTime = 0.0f;
-	float LerpDuration = 1.0f;
-	FVector StartLocation;
-	FVector TargetLocation;
+	
+	int itemCount;
 };

@@ -4,6 +4,7 @@
 #include "CardboardBox.h"
 #include "Camera/CameraComponent.h"
 #include "Components/PrimitiveComponent.h"
+#include "Shelf/ShelfSlotItemComponent.h"
 
 ACardboardBox::ACardboardBox()
 {
@@ -29,23 +30,6 @@ void ACardboardBox::Tick(float DeltaTime)
             FRotator TargetRot = Player->GetCamera()->GetComponentRotation();
             PhysicsHandle->SetTargetLocationAndRotation(TargetLoc, TargetRot);
         }
-    }
-
-	
-	if (bIsLerping)
-    {
-        LerpElapsedTime += DeltaTime;
-        float Alpha = FMath::Clamp(LerpElapsedTime / LerpDuration, 0.0f, 1.0f);
-
-        FVector NewLocation = FMath::Lerp(StartLocation, TargetLocation, Alpha);
-        SetActorLocation(NewLocation);
-
-        if (Alpha >= 1.0f)
-        {
-            bIsLerping = false;
-        }
-
-		//StartLocation = GetActorLocation(); // Goes faster?
     }
 }
 
@@ -92,14 +76,15 @@ void ACardboardBox::OpenBox(AActor* Interactor)
 
 void ACardboardBox::MoveObject(FVector NewTargetLocation, float Duration)
 {
-	if (PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
+	if (itemCount > 0)
 	{
-		PhysicsHandle->ReleaseComponent();
+		for (UShelfSlotItemComponent* Item : Items)
+		{
+			if (Item && Item->bIsOccupied)
+			{
+				Item->MoveObject(NewTargetLocation, Duration);
+				return;
+			}
+		}
 	}
-	SetCurrentInteractor(nullptr);
-	StartLocation = GetActorLocation();
-	LerpElapsedTime = 0.0f;
-	LerpDuration = Duration;
-	TargetLocation = NewTargetLocation;
-	bIsLerping = true;
 }
