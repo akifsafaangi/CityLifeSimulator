@@ -18,6 +18,7 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
+	ACardboardBox();
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -28,8 +29,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category="CardboardBox")
     void OpenCloseBox();
 public:
-	ACardboardBox();
-	void MoveObject(FVector NewTargetLocation, float Duration);
+	void MoveObject(class UShelfSlotItemComponent* TargetSlot, float Duration);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CardboardBoxItems")
 	TArray<class UShelfSlotItemComponent*> Items;

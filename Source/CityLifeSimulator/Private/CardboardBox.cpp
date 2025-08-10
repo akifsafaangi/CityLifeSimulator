@@ -16,6 +16,10 @@ ACardboardBox::ACardboardBox()
 void ACardboardBox::BeginPlay()
 {
 	Super::BeginPlay();
+	// for (UShelfSlotItemComponent* Item : Items)
+	// {
+	// 	Item->OnTransferFinished.AddDynamic(this, &ACardboardBox::----);
+	// }
 }
 
 void ACardboardBox::Tick(float DeltaTime)
@@ -74,17 +78,15 @@ void ACardboardBox::OpenBox(AActor* Interactor)
 	OpenCloseBox();
 }
 
-void ACardboardBox::MoveObject(FVector NewTargetLocation, float Duration)
+void ACardboardBox::MoveObject(UShelfSlotItemComponent* TargetSlot, float Duration)
 {
-	if (itemCount > 0)
+	if (!TargetSlot) return;
+
+	for (UShelfSlotItemComponent* Item : Items)
 	{
-		for (UShelfSlotItemComponent* Item : Items)
+		if (Item && Item->VisualMesh)
 		{
-			if (Item && Item->bIsOccupied)
-			{
-				Item->MoveObject(NewTargetLocation, Duration);
-				return;
-			}
+			Item->StartTransfer(TargetSlot, Duration);
 		}
 	}
 }

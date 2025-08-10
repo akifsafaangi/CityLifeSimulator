@@ -45,13 +45,10 @@ void AStorageShelf::PlaceObjects(UBoxComponent* sectionBox, ACardboardBox* Cardb
 			}
 
 			// If the slot is not occupied, attach the cardboard box to it
-			if (!ShelfSlotItem->bIsOccupied)
+			if (!ShelfSlotItem->VisualMesh)
 			{
-				ShelfSlotItem->bIsOccupied = true;
-				Cardboard->MoveObject(ShelfSlotItem->GetComponentLocation(), 1.0f);
+				Cardboard->MoveObject(ShelfSlotItem, 1.0f);
 				UE_LOG(LogTemp, Warning, TEXT("Cardboard box placed in slot: %s"), *ShelfSlotItem->GetName());
-
-
 				return;
 			}
 		}

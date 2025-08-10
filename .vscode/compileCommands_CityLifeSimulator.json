@@ -80,6 +80,14 @@
 		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
 	},
 	{
+		"file": "C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\Source\\CityLifeSimulator\\Private\\Shelf\\ShelfSlotItemComponent.cpp",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\.vscode\\compileCommands_CityLifeSimulator\\CityLifeSimulator.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	},
+	{
 		"file": "C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\Source\\CityLifeSimulator\\Private\\Shelf\\StorageShelf.cpp",
 		"arguments": [
 			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\Hostx64\\x64\\cl.exe",
@@ -137,6 +145,22 @@
 	},
 	{
 		"file": "C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\Source\\CityLifeSimulator\\Public\\Items\\PlacableObject.h",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\.vscode\\compileCommands_CityLifeSimulator\\CityLifeSimulator.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\Source\\CityLifeSimulator\\Public\\Shelf\\FItemData.h",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\.vscode\\compileCommands_CityLifeSimulator\\CityLifeSimulator.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\Source\\CityLifeSimulator\\Public\\Shelf\\ShelfSlotItemComponent.h",
 		"arguments": [
 			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\Hostx64\\x64\\cl.exe",
 			"@C:\\Users\\akif_\\Documents\\Unreal Projects\\CityLifeSimulator\\.vscode\\compileCommands_CityLifeSimulator\\CityLifeSimulator.1.rsp"

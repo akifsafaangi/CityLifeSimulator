@@ -6,12 +6,12 @@
 // Sets default values for this component's properties
 UShelfSlotItemComponent::UShelfSlotItemComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-	bIsOccupied = false;
-	//ItemMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ItemMesh"));
-	// ...
+	bIsTransferring = false;
+    TransferDuration = 0.6f;
+    ElapsedTime = 0.f;
+    PendingDestination = nullptr;
+	TempMesh = nullptr;
 }
 
 
@@ -20,8 +20,19 @@ void UShelfSlotItemComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
-	
+	if (!VisualMesh)
+    {
+        TArray<USceneComponent*> Children;
+        GetChildrenComponents(false, Children);
+        for (USceneComponent* Child : Children)
+        {
+            if (UStaticMeshComponent* SMC = Cast<UStaticMeshComponent>(Child))
+            {
+                VisualMesh = SMC;
+                break;
+            }
+        }
+    }
 }
 
 
@@ -30,37 +41,115 @@ void UShelfSlotItemComponent::TickComponent(float DeltaTime, ELevelTick TickType
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (bIsLerping)
+	if (!bIsTransferring || !TempMesh || !PendingDestination)
     {
-        LerpElapsedTime += DeltaTime;
-        float Alpha = FMath::Clamp(LerpElapsedTime / LerpDuration, 0.0f, 1.0f);
+        return;
+    }
 
-        FVector NewLocation = FMath::Lerp(StartLocation, TargetLocation, Alpha);
-        ItemMesh->SetWorldLocation(NewLocation);
+    ElapsedTime += DeltaTime;
+    float Alpha = TransferDuration <= 0.f ? 1.f : FMath::Clamp(ElapsedTime / TransferDuration, 0.f, 1.f);
 
-        if (Alpha >= 1.0f)
-        {
-			bIsOccupied = false;
-            bIsLerping = false;
-        }
+    float SmoothAlpha = FMath::InterpEaseInOut(0.f, 1.f, Alpha, 2.0f);
 
-		//StartLocation = GetActorLocation(); // Goes faster?
+    FVector NewLoc = FMath::Lerp(StartLocationWS, TargetLocationWS, SmoothAlpha);
+    FQuat NewQuat = FQuat::Slerp(StartRotationWS, TargetRotationWS, SmoothAlpha);
+    FVector NewScale = FMath::Lerp(StartScaleWS, TargetScaleWS, SmoothAlpha);
+
+    TempMesh->SetWorldLocationAndRotation(NewLoc, NewQuat);
+    TempMesh->SetWorldScale3D(NewScale);
+
+    if (Alpha >= 1.f - KINDA_SMALL_NUMBER)
+    {
+        FinishTransfer();
     }
 }
 
-void UShelfSlotItemComponent::MoveObject(FVector NewTargetLocation, float Duration)
+// Start the transfer process
+void UShelfSlotItemComponent::StartTransfer(UShelfSlotItemComponent* DestinationSlot, float Duration)
 {
-	if (Duration <= 0.0f) return;
+	if (!DestinationSlot || !VisualMesh || !StoredItem.Mesh)
+    {
+        return;
+    }
 
-	GetChildrenComponents<UStaticMeshComponent>(true, ItemMesh);
-	if (ItemMesh)
-	{
-		ItemMesh->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
-		StartLocation = ItemMesh->GetComponentLocation();
-		TargetLocation = NewTargetLocation;
-		LerpElapsedTime = 0.0f;
-		LerpDuration = Duration;
-		bIsLerping = true;
-	}
+    if (bIsTransferring)
+    {
+        CancelTransfer();
+    }
 
+    PendingDestination = DestinationSlot;
+    TransferDuration = FMath::Max(0.01f, Duration);
+    ElapsedTime = 0.f;
+    bIsTransferring = true;
+
+    TempMesh = NewObject<UStaticMeshComponent>(GetOwner());
+    TempMesh->RegisterComponent();
+    TempMesh->SetStaticMesh(StoredItem.Mesh);
+    if (StoredItem.Material)
+    {
+        TempMesh->SetMaterial(0, StoredItem.Material);
+    }
+    TempMesh->SetWorldTransform(VisualMesh->GetComponentTransform());
+
+    VisualMesh->SetVisibility(false);
+
+    StartLocationWS = TempMesh->GetComponentLocation();
+    StartRotationWS = TempMesh->GetComponentQuat();
+    StartScaleWS = TempMesh->GetComponentScale();
+
+    FTransform DestWorldTransform = PendingDestination->GetComponentTransform();
+    TargetLocationWS = DestWorldTransform.GetLocation();
+    TargetRotationWS = DestWorldTransform.GetRotation();
+    TargetScaleWS = PendingDestination->GetComponentScale();
+}
+
+void UShelfSlotItemComponent::FinishTransfer()
+{
+    if (!bIsTransferring || !TempMesh || !PendingDestination)
+    {
+        bIsTransferring = false;
+        PendingDestination = nullptr;
+        return;
+    }
+
+    TempMesh->DestroyComponent();
+    TempMesh = nullptr;
+
+    PendingDestination->StoredItem = StoredItem;
+    if (PendingDestination->VisualMesh)
+    {
+        PendingDestination->VisualMesh->SetStaticMesh(StoredItem.Mesh);
+        if (StoredItem.Material)
+        {
+            PendingDestination->VisualMesh->SetMaterial(0, StoredItem.Material);
+        }
+        PendingDestination->VisualMesh->SetVisibility(true);
+    }
+
+    StoredItem = FItemData();
+    VisualMesh->SetStaticMesh(nullptr);
+    VisualMesh->SetVisibility(false);
+
+    //OnTransferFinished.Broadcast(PendingDestination);
+
+    bIsTransferring = false;
+    ElapsedTime = 0.f;
+    PendingDestination = nullptr;
+}
+
+
+void UShelfSlotItemComponent::CancelTransfer()
+{
+    if (!bIsTransferring)
+        return;
+
+    if (TempMesh)
+    {
+        TempMesh->DestroyComponent();
+        TempMesh = nullptr;
+    }
+
+    bIsTransferring = false;
+    ElapsedTime = 0.f;
+    PendingDestination = nullptr;
 }
