@@ -12,6 +12,16 @@ UShelfSlotItemComponent::UShelfSlotItemComponent()
     ElapsedTime = 0.f;
     PendingDestination = nullptr;
 	TempMesh = nullptr;
+    this->SetWorldScale3D(FVector(0.001f, 0.009f, 0.019f));
+    
+    VisualMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VisualMesh"));
+    VisualMesh->SetupAttachment(this);
+
+    VisualMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+    VisualMesh->SetGenerateOverlapEvents(false);
+    
+    VisualMesh->SetVisibility(false);
+
 }
 
 
@@ -19,20 +29,6 @@ UShelfSlotItemComponent::UShelfSlotItemComponent()
 void UShelfSlotItemComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	if (!VisualMesh)
-    {
-        TArray<USceneComponent*> Children;
-        GetChildrenComponents(false, Children);
-        for (USceneComponent* Child : Children)
-        {
-            if (UStaticMeshComponent* SMC = Cast<UStaticMeshComponent>(Child))
-            {
-                VisualMesh = SMC;
-                break;
-            }
-        }
-    }
 }
 
 
@@ -124,11 +120,11 @@ void UShelfSlotItemComponent::FinishTransfer()
             PendingDestination->VisualMesh->SetMaterial(0, StoredItem.Material);
         }
         PendingDestination->VisualMesh->SetVisibility(true);
+        UE_LOG(LogTemp, Warning, TEXT("Finished transfer to slot: %s"), *PendingDestination->GetName());
     }
 
     StoredItem = FItemData();
     VisualMesh->SetStaticMesh(nullptr);
-    VisualMesh->SetVisibility(false);
 
     //OnTransferFinished.Broadcast(PendingDestination);
 
@@ -152,4 +148,31 @@ void UShelfSlotItemComponent::CancelTransfer()
     bIsTransferring = false;
     ElapsedTime = 0.f;
     PendingDestination = nullptr;
+}
+
+void UShelfSlotItemComponent::SetItemData(const FItemData& NewItemData)
+{
+    StoredItem = NewItemData;
+    UE_LOG(LogTemp, Warning, TEXT("Set item data for item: %s"), *NewItemData.ItemID.ToString());
+    if (VisualMesh)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Set static mesh for item: %s"), *NewItemData.ItemID.ToString());
+        VisualMesh->SetStaticMesh(NewItemData.Mesh);
+        if (NewItemData.Material)
+        {
+            VisualMesh->SetMaterial(0, NewItemData.Material);
+            UE_LOG(LogTemp, Warning, TEXT("Set material for item: %s"), *NewItemData.ItemID.ToString());
+        }
+        VisualMesh->SetVisibility(true);
+    }
+}
+
+void UShelfSlotItemComponent::ClearItemData()
+{
+    StoredItem = FItemData();
+    if (VisualMesh)
+    {
+        VisualMesh->SetStaticMesh(nullptr);
+        VisualMesh->SetVisibility(false);
+    }
 }

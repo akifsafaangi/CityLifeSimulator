@@ -17,6 +17,18 @@ void AStorageShelf::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	for (UBoxComponent* coll : SectionCollisions) {
+		TArray<USceneComponent*> children;
+		coll->GetChildrenComponents(false, children);
+		for (USceneComponent* child : children)
+		{
+			UShelfSlotItemComponent* shelfChild = Cast<UShelfSlotItemComponent>(child);
+			if (shelfChild)
+			{
+				shelfChild->ClearItemData();
+			}
+		}
+	}
 }
 
 // Called every frame
@@ -45,10 +57,10 @@ void AStorageShelf::PlaceObjects(UBoxComponent* sectionBox, ACardboardBox* Cardb
 			}
 
 			// If the slot is not occupied, attach the cardboard box to it
-			if (!ShelfSlotItem->VisualMesh)
+			if (!ShelfSlotItem->VisualMesh->GetStaticMesh())
 			{
-				Cardboard->MoveObject(ShelfSlotItem, 1.0f);
 				UE_LOG(LogTemp, Warning, TEXT("Cardboard box placed in slot: %s"), *ShelfSlotItem->GetName());
+				Cardboard->MoveObject(ShelfSlotItem, 1.0f);
 				return;
 			}
 		}

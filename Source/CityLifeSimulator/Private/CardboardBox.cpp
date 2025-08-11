@@ -16,10 +16,19 @@ ACardboardBox::ACardboardBox()
 void ACardboardBox::BeginPlay()
 {
 	Super::BeginPlay();
-	// for (UShelfSlotItemComponent* Item : Items)
-	// {
-	// 	Item->OnTransferFinished.AddDynamic(this, &ACardboardBox::----);
-	// }
+	for (UShelfSlotItemComponent* Item : Items)
+	{
+		if (Item && ItemMesh)
+		{
+			FItemData ItemData;
+			ItemData.ItemID = FName(*FString::Printf(TEXT("Item_%d"), Items.IndexOfByKey(Item)));
+			ItemData.Mesh = ItemMesh;
+			ItemData.Material = DefaultItemMaterial;
+
+			Item->SetItemData(ItemData);
+			UE_LOG(LogTemp, Warning, TEXT("Initialized item: %s"), *ItemData.ItemID.ToString());
+		}
+	}
 }
 
 void ACardboardBox::Tick(float DeltaTime)
@@ -87,6 +96,7 @@ void ACardboardBox::MoveObject(UShelfSlotItemComponent* TargetSlot, float Durati
 		if (Item && Item->VisualMesh)
 		{
 			Item->StartTransfer(TargetSlot, Duration);
+			return;
 		}
 	}
 }

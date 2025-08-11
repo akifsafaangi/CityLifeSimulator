@@ -43,6 +43,9 @@ public:
 	
 	UPROPERTY()
 	UStaticMeshComponent* TempMesh;
+
+	void SetItemData(const FItemData& NewItemData);
+	void ClearItemData();
 protected:
 bool bIsTransferring;
     float TransferDuration;

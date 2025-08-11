@@ -34,12 +34,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CardboardBoxItems")
 	TArray<class UShelfSlotItemComponent*> Items;
 
-	UFUNCTION(BlueprintCallable, Category = "CardboardBoxItems")
-	int GetItemCount() const { return itemCount; }
-	UFUNCTION(BlueprintCallable, Category = "CardboardBoxItems")
-	void SetItemCount(int NewCount) { itemCount = NewCount; }
+
+	UPROPERTY(EditAnywhere)
+	UStaticMesh* ItemMesh;
+	
+	UPROPERTY(EditAnywhere)
+	UMaterialInterface* DefaultItemMaterial;
 private:
 	void Throw();
-	
-	int itemCount;
 };
