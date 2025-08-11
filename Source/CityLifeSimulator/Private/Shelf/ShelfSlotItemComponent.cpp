@@ -2,6 +2,7 @@
 
 
 #include "Shelf/ShelfSlotItemComponent.h"
+#include "Components/BoxComponent.h"
 
 // Sets default values for this component's properties
 UShelfSlotItemComponent::UShelfSlotItemComponent()
@@ -96,7 +97,23 @@ void UShelfSlotItemComponent::StartTransfer(UShelfSlotItemComponent* Destination
     FTransform DestWorldTransform = PendingDestination->GetComponentTransform();
     TargetLocationWS = DestWorldTransform.GetLocation();
     TargetRotationWS = DestWorldTransform.GetRotation();
-    TargetScaleWS = PendingDestination->GetComponentScale();
+
+    UBoxComponent* SlotBox = Cast<UBoxComponent>(PendingDestination->GetAttachParent());
+    if (SlotBox && StoredItem.Mesh)
+    {
+        FVector MeshOrigin, MeshExtent;
+        TempMesh->GetLocalBounds(MeshOrigin, MeshExtent);
+
+        FVector SlotExtent = SlotBox->GetScaledBoxExtent();
+        FVector ScaleRatio = SlotExtent * 2.0f / (MeshExtent * 2.0f);
+        float UniformScale = FMath::Min3(ScaleRatio.X, ScaleRatio.Y, ScaleRatio.Z);
+
+        TargetScaleWS = FVector(UniformScale);
+    }
+    else
+    {
+        TargetScaleWS = StartScaleWS;
+    }
 }
 
 void UShelfSlotItemComponent::FinishTransfer()
@@ -120,6 +137,7 @@ void UShelfSlotItemComponent::FinishTransfer()
             PendingDestination->VisualMesh->SetMaterial(0, StoredItem.Material);
         }
         PendingDestination->VisualMesh->SetVisibility(true);
+        PendingDestination->VisualMesh->SetWorldScale3D(TargetScaleWS);
         UE_LOG(LogTemp, Warning, TEXT("Finished transfer to slot: %s"), *PendingDestination->GetName());
     }
 
