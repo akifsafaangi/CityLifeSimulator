@@ -98,21 +98,16 @@ void UShelfSlotItemComponent::StartTransfer(UShelfSlotItemComponent* Destination
     TargetLocationWS = DestWorldTransform.GetLocation();
     TargetRotationWS = DestWorldTransform.GetRotation();
 
-    UBoxComponent* SlotBox = Cast<UBoxComponent>(PendingDestination->GetAttachParent());
-    if (SlotBox && StoredItem.Mesh)
     {
         FVector MeshOrigin, MeshExtent;
         TempMesh->GetLocalBounds(MeshOrigin, MeshExtent);
 
-        FVector SlotExtent = SlotBox->GetScaledBoxExtent();
-        FVector ScaleRatio = SlotExtent * 2.0f / (MeshExtent * 2.0f);
-        float UniformScale = FMath::Min3(ScaleRatio.X, ScaleRatio.Y, ScaleRatio.Z);
+        FVector SlotWorldScale = PendingDestination->GetComponentScale();
+        FVector SlotSize = MeshExtent * SlotWorldScale * 2.0f;
 
-        TargetScaleWS = FVector(UniformScale);
-    }
-    else
-    {
-        TargetScaleWS = StartScaleWS;
+        FVector ScaleRatio = SlotSize / (MeshExtent * 2.0f);
+
+        TargetScaleWS = ScaleRatio;
     }
 }
 
@@ -138,7 +133,6 @@ void UShelfSlotItemComponent::FinishTransfer()
         }
         PendingDestination->VisualMesh->SetVisibility(true);
         PendingDestination->VisualMesh->SetWorldScale3D(TargetScaleWS);
-        UE_LOG(LogTemp, Warning, TEXT("Finished transfer to slot: %s"), *PendingDestination->GetName());
     }
 
     StoredItem = FItemData();
@@ -171,15 +165,12 @@ void UShelfSlotItemComponent::CancelTransfer()
 void UShelfSlotItemComponent::SetItemData(const FItemData& NewItemData)
 {
     StoredItem = NewItemData;
-    UE_LOG(LogTemp, Warning, TEXT("Set item data for item: %s"), *NewItemData.ItemID.ToString());
     if (VisualMesh)
     {
-        UE_LOG(LogTemp, Warning, TEXT("Set static mesh for item: %s"), *NewItemData.ItemID.ToString());
         VisualMesh->SetStaticMesh(NewItemData.Mesh);
         if (NewItemData.Material)
         {
             VisualMesh->SetMaterial(0, NewItemData.Material);
-            UE_LOG(LogTemp, Warning, TEXT("Set material for item: %s"), *NewItemData.ItemID.ToString());
         }
         VisualMesh->SetVisibility(true);
     }
