@@ -58,8 +58,12 @@ private:
 
 	void PressShelfInteract();
 	void ReleaseShelfInteract();
+	void PressCardboardInteract();
+	void ReleaseCardboardInteract();
+
 
 	bool bIsShelfInteracting;
+	int ShelfFromCardboard;
 public:
 	UPROPERTY(BlueprintReadWrite)
 	bool bIsHolding;

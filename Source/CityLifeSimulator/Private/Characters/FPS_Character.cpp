@@ -22,6 +22,7 @@ AFPS_Character::AFPS_Character()
 	bCountHolding = false;
 	MaxHoldingTime = 2.0f;
 	bIsShelfInteracting = false;
+	ShelfFromCardboard = -1;
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	SpringArm->SetupAttachment(RootComponent);
@@ -78,6 +79,9 @@ void AFPS_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAction("OpenObject", IE_Pressed, this, &AFPS_Character::OpenBox);
 	PlayerInputComponent->BindAction("ShelfPlacement", IE_Pressed, this, &AFPS_Character::PressShelfInteract);
 	PlayerInputComponent->BindAction("ShelfPlacement", IE_Released, this, &AFPS_Character::ReleaseShelfInteract);
+
+	PlayerInputComponent->BindAction("CardboardPlacement", IE_Pressed, this, &AFPS_Character::PressCardboardInteract);
+	PlayerInputComponent->BindAction("CardboardPlacement", IE_Released, this, &AFPS_Character::ReleaseCardboardInteract);
 
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AFPS_Character::MoveForward);
@@ -228,7 +232,18 @@ void AFPS_Character::ShelfInteract()
 		{
 			if (ACardboardBox* Cardboard = Cast<ACardboardBox>(HeldActor))
 			{
-				Shelf->PlaceObjects(Cast<UBoxComponent>(HitComponent), Cardboard);
+				if (ShelfFromCardboard == 0)
+				{
+					Shelf->PlaceObjects(Cast<UBoxComponent>(HitComponent), Cardboard, false);
+				}
+				else if (ShelfFromCardboard == 1)
+				{
+					Shelf->PlaceObjects(Cast<UBoxComponent>(HitComponent), Cardboard, true);
+				}
+				else
+				{
+					UE_LOG(LogTemp, Warning, TEXT("ShelfFromCardboard is not set correctly"));
+				}
 			}
 			else
 			{
@@ -250,12 +265,29 @@ void AFPS_Character::ClearInteractActor()
 	PlacingActor = nullptr;
 }
 
+
+//SHOULD CHANGE?
 void AFPS_Character::PressShelfInteract()
 {
 	bIsShelfInteracting = true;
+	ShelfFromCardboard = 1;
 }
 
 void AFPS_Character::ReleaseShelfInteract()
 {
 	bIsShelfInteracting = false;
+	ShelfFromCardboard = -1;
+}
+
+void AFPS_Character::PressCardboardInteract()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Pressing cardboard interact"));
+	bIsShelfInteracting = true;
+	ShelfFromCardboard = 0;
+}
+
+void AFPS_Character::ReleaseCardboardInteract()
+{
+	bIsShelfInteracting = false;
+	ShelfFromCardboard = -1;
 }

@@ -26,7 +26,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void PlaceObjects(UBoxComponent* sectionBox, ACardboardBox* Cardboard);
+	void PlaceObjects(UBoxComponent* sectionBox, ACardboardBox* Cardboard, bool bDirection);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Collision")
 	TArray<UBoxComponent*> SectionCollisions;

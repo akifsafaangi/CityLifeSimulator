@@ -29,7 +29,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category="CardboardBox")
     void OpenCloseBox();
 public:
-	void MoveObject(class UShelfSlotItemComponent* TargetSlot, float Duration);
+	void MoveObject(class UShelfSlotItemComponent* TargetSlot, float Duration, bool bDirection);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CardboardBoxItems")
 	TArray<class UShelfSlotItemComponent*> Items;

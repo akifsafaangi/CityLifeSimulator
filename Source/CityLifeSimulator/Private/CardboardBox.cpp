@@ -87,17 +87,30 @@ void ACardboardBox::OpenBox(AActor* Interactor)
 	OpenCloseBox();
 }
 
-void ACardboardBox::MoveObject(UShelfSlotItemComponent* TargetSlot, float Duration)
+void ACardboardBox::MoveObject(UShelfSlotItemComponent* TargetSlot, float Duration, bool bDirection)
 {
 	if (!TargetSlot) return;
 
 	for (UShelfSlotItemComponent* Item : Items)
 	{
-		if (Item && Item->VisualMesh->GetStaticMesh() && !Item->bIsMoving)
+		if (Item && !Item->bIsMoving)
 		{
-			TargetSlot->bIsMoving = true;
-			Item->StartTransfer(TargetSlot, Duration);
-			return;
+			if (bDirection) {
+				if (Item->VisualMesh->GetStaticMesh())
+				{
+					TargetSlot->bIsMoving = true;
+					Item->StartTransfer(TargetSlot, Duration);
+					return;
+				}
+			} else {
+				if (!Item->VisualMesh->GetStaticMesh())
+				{
+					UE_LOG(LogTemp, Warning, TEXT("Moving item: %s"), *Item->GetName());
+					Item->bIsMoving = true;
+					TargetSlot->StartTransfer(Item, Duration);
+					return;
+				}
+			}
 		}
 	}
 }

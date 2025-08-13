@@ -19,6 +19,8 @@ UShelfSlotItemComponent::UShelfSlotItemComponent()
     VisualMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VisualMesh"));
     VisualMesh->SetupAttachment(this);
 
+    VisualMesh->SetStaticMesh(nullptr);
+
     VisualMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
     VisualMesh->SetGenerateOverlapEvents(false);
     

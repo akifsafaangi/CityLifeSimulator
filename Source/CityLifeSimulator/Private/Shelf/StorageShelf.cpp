@@ -38,14 +38,11 @@ void AStorageShelf::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AStorageShelf::PlaceObjects(UBoxComponent* sectionBox, ACardboardBox* Cardboard)
+void AStorageShelf::PlaceObjects(UBoxComponent* sectionBox, ACardboardBox* Cardboard, bool bDirection)
 {
 	UBoxComponent* Section = FindSection(sectionBox);
 	if (Section)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Placing objects in section: %s"), *Section->GetName());
-		UE_LOG(LogTemp, Warning, TEXT("Placing cardboard box: %s"), *Cardboard->GetName());
-
 		TArray<USceneComponent*> ChildComponents;
 		Section->GetChildrenComponents(true, ChildComponents);
 		for (USceneComponent* Child : ChildComponents)
@@ -59,10 +56,13 @@ void AStorageShelf::PlaceObjects(UBoxComponent* sectionBox, ACardboardBox* Cardb
 			{
 				FScopeLock Lock(&CriticalSection);
 				// If the slot is not occupied, attach the cardboard box to it
-				if (!ShelfSlotItem->VisualMesh->GetStaticMesh() && !ShelfSlotItem->bIsMoving)
+				if (!ShelfSlotItem->bIsMoving)
 				{
-					Cardboard->MoveObject(ShelfSlotItem, 1.0f);
-					return;
+					UE_LOG(LogTemp, Warning, TEXT("bDirection: %d, bGetStaticMesh: %s"), bDirection, ShelfSlotItem->VisualMesh->GetStaticMesh() ? TEXT("true") : TEXT("false"));
+					if ((!ShelfSlotItem->VisualMesh->GetStaticMesh() && bDirection) || (ShelfSlotItem->VisualMesh->GetStaticMesh() && !bDirection)) {
+						Cardboard->MoveObject(ShelfSlotItem, 1.0f, bDirection);
+						return;
+					}
 				}
 			}
 		}
