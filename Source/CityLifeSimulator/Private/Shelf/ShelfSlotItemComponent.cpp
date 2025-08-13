@@ -13,6 +13,7 @@ UShelfSlotItemComponent::UShelfSlotItemComponent()
     ElapsedTime = 0.f;
     PendingDestination = nullptr;
 	TempMesh = nullptr;
+    bIsMoving = false;
     this->SetWorldScale3D(FVector(0.001f, 0.009f, 0.019f));
     
     VisualMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VisualMesh"));
@@ -64,7 +65,7 @@ void UShelfSlotItemComponent::TickComponent(float DeltaTime, ELevelTick TickType
 // Start the transfer process
 void UShelfSlotItemComponent::StartTransfer(UShelfSlotItemComponent* DestinationSlot, float Duration)
 {
-	if (!DestinationSlot || !VisualMesh || !StoredItem.Mesh)
+	if (!DestinationSlot || !VisualMesh || !StoredItem.Mesh || bIsMoving)
     {
         return;
     }
@@ -73,7 +74,7 @@ void UShelfSlotItemComponent::StartTransfer(UShelfSlotItemComponent* Destination
     {
         CancelTransfer();
     }
-
+    bIsMoving = true;
     PendingDestination = DestinationSlot;
     TransferDuration = FMath::Max(0.01f, Duration);
     ElapsedTime = 0.f;
@@ -142,7 +143,9 @@ void UShelfSlotItemComponent::FinishTransfer()
 
     bIsTransferring = false;
     ElapsedTime = 0.f;
+    PendingDestination->bIsMoving = false;
     PendingDestination = nullptr;
+    bIsMoving = false;
 }
 
 

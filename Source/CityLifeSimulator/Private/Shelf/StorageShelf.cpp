@@ -10,6 +10,7 @@ AStorageShelf::AStorageShelf()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
+	bIsInteracting = false;
 }
 
 // Called when the game starts or when spawned
@@ -55,13 +56,14 @@ void AStorageShelf::PlaceObjects(UBoxComponent* sectionBox, ACardboardBox* Cardb
 			{
 				continue; // Skip if the slot is not a valid ShelfSlotItemComponent
 			}
-
-			// If the slot is not occupied, attach the cardboard box to it
-			if (!ShelfSlotItem->VisualMesh->GetStaticMesh())
 			{
-				UE_LOG(LogTemp, Warning, TEXT("Cardboard box placed in slot: %s"), *ShelfSlotItem->GetName());
-				Cardboard->MoveObject(ShelfSlotItem, 1.0f);
-				return;
+				FScopeLock Lock(&CriticalSection);
+				// If the slot is not occupied, attach the cardboard box to it
+				if (!ShelfSlotItem->VisualMesh->GetStaticMesh() && !ShelfSlotItem->bIsMoving)
+				{
+					Cardboard->MoveObject(ShelfSlotItem, 1.0f);
+					return;
+				}
 			}
 		}
 	}

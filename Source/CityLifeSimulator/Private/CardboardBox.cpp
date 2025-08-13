@@ -93,8 +93,9 @@ void ACardboardBox::MoveObject(UShelfSlotItemComponent* TargetSlot, float Durati
 
 	for (UShelfSlotItemComponent* Item : Items)
 	{
-		if (Item && Item->VisualMesh->GetStaticMesh())
+		if (Item && Item->VisualMesh->GetStaticMesh() && !Item->bIsMoving)
 		{
+			TargetSlot->bIsMoving = true;
 			Item->StartTransfer(TargetSlot, Duration);
 			return;
 		}

@@ -21,6 +21,7 @@ AFPS_Character::AFPS_Character()
 	bLongPressTriggered	= false;
 	bCountHolding = false;
 	MaxHoldingTime = 2.0f;
+	bIsShelfInteracting = false;
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	SpringArm->SetupAttachment(RootComponent);
@@ -61,6 +62,9 @@ void AFPS_Character::Tick(float DeltaTime)
 		}
 	}
 	UpdatePlacement();
+	if (bIsShelfInteracting) {
+		ShelfInteract();
+	}
 }
 
 // Called to bind functionality to input
@@ -72,7 +76,8 @@ void AFPS_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AFPS_Character::Interact);
 	PlayerInputComponent->BindAction("Interact", IE_Released, this, &AFPS_Character::InteractRelease);
 	PlayerInputComponent->BindAction("OpenObject", IE_Pressed, this, &AFPS_Character::OpenBox);
-	PlayerInputComponent->BindAction("ShelfPlacement", IE_Pressed, this, &AFPS_Character::ShelfInteract);
+	PlayerInputComponent->BindAction("ShelfPlacement", IE_Pressed, this, &AFPS_Character::PressShelfInteract);
+	PlayerInputComponent->BindAction("ShelfPlacement", IE_Released, this, &AFPS_Character::ReleaseShelfInteract);
 
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AFPS_Character::MoveForward);
@@ -243,4 +248,14 @@ void AFPS_Character::ClearInteractActor()
 	HeldActor = nullptr;
 	HitObject = nullptr;
 	PlacingActor = nullptr;
+}
+
+void AFPS_Character::PressShelfInteract()
+{
+	bIsShelfInteracting = true;
+}
+
+void AFPS_Character::ReleaseShelfInteract()
+{
+	bIsShelfInteracting = false;
 }

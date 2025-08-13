@@ -55,6 +55,11 @@ private:
 	bool bLongPressTriggered;
 	float MaxHoldingTime;
 
+
+	void PressShelfInteract();
+	void ReleaseShelfInteract();
+
+	bool bIsShelfInteracting;
 public:
 	UPROPERTY(BlueprintReadWrite)
 	bool bIsHolding;

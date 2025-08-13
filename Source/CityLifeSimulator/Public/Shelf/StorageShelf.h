@@ -34,7 +34,30 @@ public:
 	int GetSlotCount() const { return slotCount; }
 	UFUNCTION(BlueprintCallable, Category = "SlotCount")
 	void SetSlotCount(int NewCount) { slotCount = NewCount; }
+
+	bool bIsInteracting;
 private:
 	UBoxComponent* FindSection(UBoxComponent* BoxComponent) const;
 	int slotCount;
+
+	FCriticalSection CriticalSection;
 };
+
+
+
+
+/*
+
+FEvent* SlotEvent = FPlatformProcess::GetSynchEventFromPool();
+
+void MyFunction()
+{
+    while (!SlotFound())  
+    {
+        SlotEvent->Wait();
+    }
+
+}
+
+
+*/

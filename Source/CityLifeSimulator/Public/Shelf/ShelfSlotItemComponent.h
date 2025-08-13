@@ -46,8 +46,10 @@ public:
 
 	void SetItemData(const FItemData& NewItemData);
 	void ClearItemData();
+
+	bool bIsMoving;
 protected:
-bool bIsTransferring;
+	bool bIsTransferring;
     float TransferDuration;
     float ElapsedTime;
 
