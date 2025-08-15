@@ -15,7 +15,7 @@ UShelfSlotItemComponent::UShelfSlotItemComponent()
 	TempMesh = nullptr;
     bIsMoving = false;
     
-    this->SetWorldScale3D(FVector(0.01f, 0.1f, 0.2f)); // Will change with bounds func
+    // this->SetWorldScale3D(FVector(0.01f, 0.1f, 0.2f)); // Will change with bounds func
     
     VisualMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VisualMesh"));
     VisualMesh->SetupAttachment(this);
@@ -101,7 +101,8 @@ void UShelfSlotItemComponent::StartTransfer(UShelfSlotItemComponent* Destination
     TargetLocationWS = DestWorldTransform.GetLocation();
     TargetRotationWS = DestWorldTransform.GetRotation();
 
-    TargetScaleWS = CalculateObjectScale(TempMesh, PendingDestination);
+    // TargetScaleWS = CalculateObjectScale(TempMesh, PendingDestination);
+    TargetScaleWS = PendingDestination->GetComponentScale();
 }
 
 void UShelfSlotItemComponent::FinishTransfer()
@@ -167,8 +168,9 @@ void UShelfSlotItemComponent::SetItemData(const FItemData& NewItemData)
         {
             VisualMesh->SetMaterial(0, NewItemData.Material);
         }
-        UE_LOG(LogTemp, Warning, TEXT("Abc"));
         VisualMesh->SetVisibility(true);
+        FVector NewScale = CalculateObjectScale(VisualMesh, GetAttachParent());
+        VisualMesh->SetWorldScale3D(NewScale);
     }
 }
 
@@ -188,27 +190,52 @@ FVector UShelfSlotItemComponent::CalculateObjectScale(UPrimitiveComponent* Sourc
         return FVector::OneVector; // Default scale
     }
 
-    FVector Origin, Extent;
 
-    if (UStaticMeshComponent* StaticMeshComp = Cast<UStaticMeshComponent>(SourceComponent))
+
+    //Deneme
+    FVector BoxExtent, MeshExtent;
+    FBox MeshBounds;
+    UBoxComponent* box = Cast<UBoxComponent>(DestinationComponent);
+    if (box)
     {
-        StaticMeshComp->GetLocalBounds(Origin, Extent);
-    }
-    else if (UBoxComponent* BoxComp = Cast<UBoxComponent>(SourceComponent))
-    {
-        Extent = BoxComp->GetUnscaledBoxExtent();
-        Origin = FVector::ZeroVector;
-    }
-    else
-    {
-        return FVector::OneVector;
+        BoxExtent =  box->GetScaledBoxExtent() * 2.0f;
+        UE_LOG(LogTemp, Warning, TEXT("Box Extent: %s"), *BoxExtent.ToString());
     }
 
-    FVector DestinationWorldScale = DestinationComponent->GetComponentScale();
+    UStaticMeshComponent* StaticMeshComp = Cast<UStaticMeshComponent>(SourceComponent);
+    if (StaticMeshComp)
+    {
+        MeshBounds = StaticMeshComp->GetStaticMesh()->GetBoundingBox();
+        MeshExtent = MeshBounds.GetSize();
+        UE_LOG(LogTemp, Warning, TEXT("Mesh Extent: %s"), *MeshExtent.ToString());
+    }
 
-    FVector SlotSize = Extent * DestinationWorldScale * 2.0f;
+    float scaleX = (BoxExtent.X / 5) / MeshExtent.X;
+    float scaleY = (BoxExtent.Y / 2) / MeshExtent.Y;
+    float scaleZ = BoxExtent.Z / MeshExtent.Z;
 
-    FVector ScaleRatio = SlotSize / (Extent * 2.0f);
+    return FVector(scaleX, scaleY, scaleZ);
+    // FVector Origin, Extent;
 
-    return ScaleRatio;
+    // if (UStaticMeshComponent* StaticMeshComp = Cast<UStaticMeshComponent>(SourceComponent))
+    // {
+    //     StaticMeshComp->GetLocalBounds(Origin, Extent);
+    // }
+    // else if (UBoxComponent* BoxComp = Cast<UBoxComponent>(SourceComponent))
+    // {
+    //     Extent = BoxComp->GetUnscaledBoxExtent();
+    //     Origin = FVector::ZeroVector;
+    // }
+    // else
+    // {
+    //     return FVector::OneVector;
+    // }
+
+    // FVector DestinationWorldScale = DestinationComponent->GetComponentScale();
+
+    // FVector SlotSize = Extent * DestinationWorldScale * 2.0f;
+
+    // FVector ScaleRatio = SlotSize / (Extent * 2.0f);
+
+    return FVector::OneVector;
 }
