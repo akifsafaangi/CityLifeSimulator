@@ -44,7 +44,10 @@ public:
 	UPROPERTY()
 	UStaticMeshComponent* TempMesh;
 
+	UFUNCTION()
 	void SetItemData(const FItemData& NewItemData);
+	
+	
 	void ClearItemData();
 
 	bool bIsMoving;
@@ -68,4 +71,6 @@ protected:
 
     // Helper
     void FinishTransfer();
+private:
+	FVector CalculateObjectScale(UPrimitiveComponent* SourceComponent, USceneComponent* DestinationComponent);
 };

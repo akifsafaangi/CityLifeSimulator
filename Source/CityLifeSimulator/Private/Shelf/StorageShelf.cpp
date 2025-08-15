@@ -11,13 +11,14 @@ AStorageShelf::AStorageShelf()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 	bIsInteracting = false;
+
+	//GetComponents<UBoxComponent>(SectionCollisions);
 }
 
 // Called when the game starts or when spawned
 void AStorageShelf::BeginPlay()
 {
 	Super::BeginPlay();
-	
 	for (UBoxComponent* coll : SectionCollisions) {
 		TArray<USceneComponent*> children;
 		coll->GetChildrenComponents(false, children);
@@ -41,12 +42,15 @@ void AStorageShelf::Tick(float DeltaTime)
 void AStorageShelf::PlaceObjects(UBoxComponent* sectionBox, ACardboardBox* Cardboard, bool bDirection)
 {
 	UBoxComponent* Section = FindSection(sectionBox);
+	UE_LOG(LogTemp, Warning, TEXT("Sectio"));
 	if (Section)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Section found: %s"), *Section->GetName());
 		TArray<USceneComponent*> ChildComponents;
 		Section->GetChildrenComponents(true, ChildComponents);
 		for (USceneComponent* Child : ChildComponents)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("Child found: %s"), *Child->GetName());
 			UShelfSlotItemComponent* ShelfSlotItem = Cast<UShelfSlotItemComponent>(Child);
 			// Check if the slot is occupied
 			if (!ShelfSlotItem)
@@ -71,8 +75,10 @@ void AStorageShelf::PlaceObjects(UBoxComponent* sectionBox, ACardboardBox* Cardb
 
 UBoxComponent* AStorageShelf::FindSection(UBoxComponent* BoxComponent) const
 {
+	UE_LOG(LogTemp, Warning, TEXT("Finding section for box: %s"), *BoxComponent->GetName());
 	for (UBoxComponent* Section : SectionCollisions)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Checking section: %s"), *Section->GetName());
 		if (Section == BoxComponent)
 		{
 			return Section;

@@ -5,30 +5,20 @@
 #include "Camera/CameraComponent.h"
 #include "Components/PrimitiveComponent.h"
 #include "Shelf/ShelfSlotItemComponent.h"
+#include "Components/BoxComponent.h"
 
 ACardboardBox::ACardboardBox()
 {
     // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = true;
     PickupCameraOffset = 200.f; // Default offset for the camera when picking up
+	BoxCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollision"));
+	BoxCollision->SetupAttachment(RootComponent);
 }
 
 void ACardboardBox::BeginPlay()
 {
 	Super::BeginPlay();
-	for (UShelfSlotItemComponent* Item : Items)
-	{
-		if (Item && ItemMesh)
-		{
-			FItemData ItemData;
-			ItemData.ItemID = FName(*FString::Printf(TEXT("Item_%d"), Items.IndexOfByKey(Item)));
-			ItemData.Mesh = ItemMesh;
-			ItemData.Material = DefaultItemMaterial;
-
-			Item->SetItemData(ItemData);
-			UE_LOG(LogTemp, Warning, TEXT("Initialized item: %s"), *ItemData.ItemID.ToString());
-		}
-	}
 }
 
 void ACardboardBox::Tick(float DeltaTime)
@@ -110,6 +100,35 @@ void ACardboardBox::MoveObject(UShelfSlotItemComponent* TargetSlot, float Durati
 					TargetSlot->StartTransfer(Item, Duration);
 					return;
 				}
+			}
+		}
+	}
+}
+
+void ACardboardBox::Init(UStaticMesh* NewItemMesh, UMaterialInterface* NewDefaultItemMaterial, int size)
+{
+	if (NewItemMesh)
+	{
+		for (int i = 0; i < size; i++)
+		{
+			UShelfSlotItemComponent* NewItem = NewObject<UShelfSlotItemComponent>(this);
+			if (NewItem)
+			{
+				NewItem->RegisterComponent();
+				NewItem->AttachToComponent(BoxCollision, FAttachmentTransformRules::KeepRelativeTransform);
+				 if (NewItem->VisualMesh)
+				{
+					NewItem->VisualMesh->RegisterComponent();
+					NewItem->VisualMesh->AttachToComponent(NewItem, FAttachmentTransformRules::KeepRelativeTransform);
+				}
+				Items.Add(NewItem);
+				FItemData ItemData;
+				ItemData.ItemID = FName(*FString::Printf(TEXT("Item_%d"), Items.IndexOfByKey(NewItem)));
+				ItemData.Mesh = NewItemMesh;
+				ItemData.Material = NewDefaultItemMaterial;
+
+				NewItem->SetItemData(ItemData);
+				UE_LOG(LogTemp, Warning, TEXT("Initialized item: %s"), *ItemData.ItemID.ToString());
 			}
 		}
 	}

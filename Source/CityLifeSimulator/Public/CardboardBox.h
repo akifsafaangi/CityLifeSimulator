@@ -34,12 +34,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CardboardBoxItems")
 	TArray<class UShelfSlotItemComponent*> Items;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class UBoxComponent* BoxCollision;
 
 	UPROPERTY(EditAnywhere)
 	UStaticMesh* ItemMesh;
 	
 	UPROPERTY(EditAnywhere)
 	UMaterialInterface* DefaultItemMaterial;
+
+	UFUNCTION(BlueprintCallable, Category = "CardboardBox")
+	void Init(UStaticMesh* NewItemMesh, UMaterialInterface* NewDefaultItemMaterial, int size = 4);
 private:
 	void Throw();
 };

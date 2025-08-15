@@ -232,12 +232,15 @@ void AFPS_Character::ShelfInteract()
 		{
 			if (ACardboardBox* Cardboard = Cast<ACardboardBox>(HeldActor))
 			{
+				UE_LOG(LogTemp, Warning, TEXT("Interacting with shelf while holding cardboard box"));
 				if (ShelfFromCardboard == 0)
 				{
+					UE_LOG(LogTemp, Warning, TEXT("Placing cardboard box on shelf"));
 					Shelf->PlaceObjects(Cast<UBoxComponent>(HitComponent), Cardboard, false);
 				}
 				else if (ShelfFromCardboard == 1)
 				{
+					UE_LOG(LogTemp, Warning, TEXT("Removing cardboard box from shelf"));
 					Shelf->PlaceObjects(Cast<UBoxComponent>(HitComponent), Cardboard, true);
 				}
 				else
